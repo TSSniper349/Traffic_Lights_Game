@@ -1,0 +1,2 @@
+all:
+	g++ -std=c++11 -I src/include -L src/lib -o main main.cpp class/Window.cpp class/Map.cpp class/Car.cpp class/Bus.cpp class/TrafficLight.cpp class/Text.cpp class/Road.cpp class/Timer.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
