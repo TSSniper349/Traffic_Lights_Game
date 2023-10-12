@@ -6,7 +6,7 @@ Car::Car(Coordination p_pos, short int road, short int p_lane, short int p_capac
     Enity::set_frame(20,40);
     Vehicle::set_speed(1);
     Vehicle::set_length(40);
-    Vehicle::set_center(10,20);
+    Vehicle::set_center(0,0);
     Vehicle::set_angle(road,p_lane);
     Vehicle::set_direction(road);
     NormalVehicle::set_capacity(p_capacity);

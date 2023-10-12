@@ -66,18 +66,12 @@ void RenderWindow::renderVehicle(std::vector<Vehicle> *p_vehicles) {
         src.h = 2000;
         SDL_Rect dst;
         dst.x = i->get_pos().x;
-        dst.y = i->get_pos().y-(i->get_center().y-20);
+        dst.y = i->get_pos().y;
         dst.w = i->get_frame().w;
         dst.h = i->get_frame().h;
 
-        // if(i->get_pos().x>965||i->get_pos().y>965||i->get_pos().x<-5||i->get_pos().y<-5) {
-        //     p_vehicles->erase(i);
-        // }
-
-        //if(i->get_direction()!=3) {
         SDL_RendererFlip flip = SDL_FLIP_NONE;
         SDL_RenderCopyEx(renderer, i->get_tex(), &src, &dst, i->get_angle(), &i->get_center(), flip);
-        //}
     }
 }
 

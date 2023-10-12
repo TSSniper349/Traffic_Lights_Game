@@ -1,6 +1,8 @@
 #include"text.h"
 #include"RenderWindow.h"
 
+Text::Text() {}
+
 Text::Text(SDL_Renderer *renderer, const std::string &font_path, short int font_size, const std::string &message_text, const SDL_Color &color) {
     tex = loadFont(renderer, font_path, font_size, message_text, color);
     SDL_QueryTexture(tex, nullptr, nullptr, &rect.w, &rect.h);
@@ -27,7 +29,6 @@ SDL_Texture *Text::loadFont(SDL_Renderer *renderer, const std::string &font_path
     if(!text_texture) {
         std::cout<<"Failed to load text texture"<<std::endl;
     }
-
     SDL_FreeSurface(text_surface);
     return text_texture;
 }

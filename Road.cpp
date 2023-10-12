@@ -7,19 +7,19 @@ Road::Road() {
 Road::Road(std::string pos) {
     list_of_lane = new Lane[3];
     if(pos == "Left") {
-        *list_of_lane = Lane(Coordination(-25,395)); 
-        *(list_of_lane+1) = Lane(Coordination(-25,420));
-        *(list_of_lane+2) = Lane(Coordination(-25,445));
+        *list_of_lane = Lane(Coordination(-25,405)); 
+        *(list_of_lane+1) = Lane(Coordination(-25,430));
+        *(list_of_lane+2) = Lane(Coordination(-25,455));
     }
     if(pos == "Right") {
-        *list_of_lane = Lane(Coordination(960,525)); 
-        *(list_of_lane+1) = Lane(Coordination(960,500));
-        *(list_of_lane+2) = Lane(Coordination(960,475));
+        *list_of_lane = Lane(Coordination(960,555)); 
+        *(list_of_lane+1) = Lane(Coordination(960,530));
+        *(list_of_lane+2) = Lane(Coordination(960,505));
     }
     if(pos == "Top") {
-        *list_of_lane = Lane(Coordination(535,-25)); 
-        *(list_of_lane+1) = Lane(Coordination(510,-25));
-        *(list_of_lane+2) = Lane(Coordination(485,-25));
+        *list_of_lane = Lane(Coordination(555,-25)); 
+        *(list_of_lane+1) = Lane(Coordination(530,-25));
+        *(list_of_lane+2) = Lane(Coordination(505,-25));
     }
     if(pos == "Bottom") {
         *list_of_lane = Lane(Coordination(405,960)); 
@@ -27,6 +27,28 @@ Road::Road(std::string pos) {
         *(list_of_lane+2) = Lane(Coordination(455,960));
     }
 
+}
+
+void Road::add_TrafficLight(TrafficLight* trafficlight){
+    _trafficLight = trafficlight;
+}
+
+TrafficLight* Road::get_trafficlight(){
+    return _trafficLight;
+}   
+
+void Road::pollEvents(SDL_Keycode keycode){
+    SDL_Event event;
+
+    if (SDL_PollEvent(&event)){
+        if (event.type == SDL_KEYDOWN){
+            cout << event.key.keysym.sym << " " << keycode << endl;
+            if (event.key.keysym.sym == keycode && _trafficLight->get_countdown_time() == 10) {
+                _trafficLight->set_color("green");
+            }
+        }
+    }
+    
 }
 
 Lane *Road::get_list_of_lane() {

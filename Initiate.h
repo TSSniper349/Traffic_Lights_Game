@@ -22,6 +22,11 @@ SDL_Texture* motorImg_0 = window.loadTexture("res/gfx/motorImg_0.png");
 SDL_Texture* motorImg_1 = window.loadTexture("res/gfx/motorImg_1.png");
 SDL_Texture* motorImg_2 = window.loadTexture("res/gfx/motorImg_2.png");
 
+TrafficLight* trafficlightLeft = new TrafficLight(window.render(), 340, 330, "res/gfx/red.png", 10);
+TrafficLight* trafficlightRight = new TrafficLight(window.render(), 590, 330, "res/gfx/red.png", 10);
+TrafficLight* trafficlightTop = new TrafficLight(window.render(), 340, 590, "res/gfx/red.png", 10);
+TrafficLight* trafficlightBottom = new TrafficLight(window.render(), 590, 590, "res/gfx/red.png", 10);
+
 Enity mainBackground(Coordination(0,0),mainBg);
 std::vector<Vehicle> *vehicles = new std::vector<Vehicle>;
 
@@ -29,6 +34,8 @@ Road Roads[4] ={Road("Left"),
                 Road("Right"),
                 Road("Top"),
                 Road("Bottom")};
+
+Text nothing = Text(window.render(),"res/dev/Blockletter.otf",18,"--", {50,50,50});
 
 int _score = 0;
 std::string _main_score = ""; 

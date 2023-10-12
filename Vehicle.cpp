@@ -35,27 +35,27 @@ void Vehicle::stop() {
 
 void Vehicle::turnLeft() {
     if(inLane==0) {
-        pos.x+=0.135;
-        pos.y-=0.1;
-        angle-=0.34;
+        pos.x+=0.06;
+        pos.y-=0.06;
+        angle-=0.15;
         if(angle>=-10&&angle<=10) direction = 3;
     }
     if(inLane==3) {
-        pos.x-=0.1;
-        pos.y+=0.135;
-        angle-=0.34;
+        pos.x-=0.06;
+        pos.y+=0.06;
+        angle-=0.18;
         if(angle>=170&&angle<=190) direction = 2;
     }
     if(inLane==6) {
-        pos.x+=0.1;
-        pos.y+=0.1;
-        angle-=0.34;
+        pos.x+=0.06;
+        pos.y+=0.06;
+        angle-=0.17;
         if(angle>=80&&angle<=100) direction = 0;
     }
     if(inLane==9) {
-        pos.x-=0.1;
-        pos.y-=0.1;
-        angle-=0.25;
+        pos.x-=0.06;
+        pos.y-=0.05;
+        angle-=0.15;
         if(angle<=-80&&angle>=-100) direction = 1;
     }
 }
@@ -63,26 +63,26 @@ void Vehicle::turnLeft() {
 void Vehicle::turnRight() {
     if(inLane==2) {
         pos.x+=0.1;
-        pos.y+=0.105;
-        angle+=0.11;
+        pos.y+=0.1;
+        angle+=0.08;
         if(angle>=170&&angle<=190) direction = 2;
     }
     if(inLane==5) {
-        pos.x-=0.1;
-        pos.y-=0.105;
-        angle+=0.13;
+        pos.x-=0.09;
+        pos.y-=0.1;
+        angle+=0.08;
         if(angle>=350&&angle<=360) direction = 3;
     }
     if(inLane==8) {
-        pos.x-=0.12;
+        pos.x-=0.1;
         pos.y+=0.1;
-        angle+=0.13;
+        angle+=0.08;
         if(angle>=260&&angle<=280) direction = 1;
     }
     if(inLane==11) {
         pos.x+=0.1;
-        pos.y-=0.11;
-        angle+=0.12;
+        pos.y-=0.1;
+        angle+=0.08;
         if(angle>=80&&angle<=100) direction = 0;
     }
 }
