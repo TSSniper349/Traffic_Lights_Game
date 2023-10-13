@@ -14,7 +14,7 @@ class Road {
 
         void add_TrafficLight(TrafficLight *traffic_light);
         TrafficLight* get_trafficlight();
-        void pollEvents(SDL_Keycode keycode);
+        //void pollEvents(SDL_Keycode keycode);
 
         Lane *get_list_of_lane();
 };

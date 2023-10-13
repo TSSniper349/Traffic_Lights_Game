@@ -48,5 +48,6 @@
         "xutility": "cpp",
         "string": "cpp",
         "chrono": "cpp"
-    }
+    },
+    "C_Cpp.default.compilerPath": "D:\\Program Files\\MinGW\\bin\\gcc.exe"
 }
