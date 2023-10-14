@@ -92,7 +92,10 @@ int main(int argc, char *args[])
 
         while (SDL_PollEvent(&event) && event.type == SDL_KEYDOWN)
         {
-            if (event.key.keysym.sym == SDLK_a)
+            if (event.key.keysym.sym == SDLK_a&&
+            TrafficLight_list[1]->get_curr_color()=="red"&&
+            TrafficLight_list[2]->get_curr_color()=="red"&&
+            TrafficLight_list[3]->get_curr_color()=="red")
             {
                 // cout<<"1";
                 if (TrafficLight_list[0]->get_curr_color() == "red")
@@ -104,7 +107,10 @@ int main(int argc, char *args[])
                     _curr_time[0] = 6;
                 }
             }
-            else if (event.key.keysym.sym == SDLK_d)
+            else if (event.key.keysym.sym == SDLK_d&&
+            TrafficLight_list[0]->get_curr_color()=="red"&&
+            TrafficLight_list[2]->get_curr_color()=="red"&&
+            TrafficLight_list[3]->get_curr_color()=="red")
             {
                 if (TrafficLight_list[1]->get_curr_color() == "red")
                     TrafficLight_list[1]->set_color("green");
@@ -115,7 +121,10 @@ int main(int argc, char *args[])
                     _curr_time[1] = 6;
                 }
             }
-            else if (event.key.keysym.sym == SDLK_w)
+            else if (event.key.keysym.sym == SDLK_w&&
+            TrafficLight_list[0]->get_curr_color()=="red"&&
+            TrafficLight_list[1]->get_curr_color()=="red"&&
+            TrafficLight_list[3]->get_curr_color()=="red")
             {
                 if (TrafficLight_list[2]->get_curr_color() == "red")
                     TrafficLight_list[2]->set_color("green");
@@ -126,7 +135,10 @@ int main(int argc, char *args[])
                     _curr_time[2] = 6;
                 }
             }
-            else if (event.key.keysym.sym == SDLK_s)
+            else if (event.key.keysym.sym == SDLK_s&&
+            TrafficLight_list[0]->get_curr_color()=="red"&&
+            TrafficLight_list[1]->get_curr_color()=="red"&&
+            TrafficLight_list[2]->get_curr_color()=="red")
             {
                 if (TrafficLight_list[3]->get_curr_color() == "red")
                     TrafficLight_list[3]->set_color("green");
@@ -200,7 +212,7 @@ int main(int argc, char *args[])
                             {
                                 if (dir == 0)
                                 {
-                                    if (curr_col == "green" || curr_col == "yellow" || (curr_col == "red" && (curr_pos.x <= 369.8 || curr_pos.x >= 372)))
+                                    if (curr_col == "green" || ((curr_col == "red" || curr_col=="yellow") && (curr_pos.x <= 369.8 || curr_pos.x >= 372)))
                                     {
                                         if (x == (Roads[i].get_list_of_lane() + j)->get_list_vehicles()->begin())
                                         {
@@ -217,7 +229,7 @@ int main(int argc, char *args[])
                                 }
                                 if (dir == 1)
                                 {
-                                    if (curr_col == "green" || curr_col == "yellow" || (curr_col == "red" && (curr_pos.x <= 588 || curr_pos.x >= 590.2)))
+                                    if (curr_col == "green" || ((curr_col == "red" || curr_col=="yellow") && (curr_pos.x <= 588 || curr_pos.x >= 590.2)))
                                     {
                                         if (x == (Roads[i].get_list_of_lane() + j)->get_list_vehicles()->begin())
                                         {
@@ -234,7 +246,7 @@ int main(int argc, char *args[])
                                 }
                                 if (dir == 2)
                                 {
-                                    if (curr_col == "green" || curr_col == "yellow" || (curr_col == "red" && (curr_pos.y <= 369.8 || curr_pos.y >= 372)))
+                                    if (curr_col == "green" || ((curr_col == "red" || curr_col=="yellow") && (curr_pos.y <= 369.8 || curr_pos.y >= 372)))
                                     {
                                         if (x == (Roads[i].get_list_of_lane() + j)->get_list_vehicles()->begin())
                                         {
@@ -251,7 +263,7 @@ int main(int argc, char *args[])
                                 }
                                 if (dir == 3)
                                 {
-                                    if (curr_col == "green" || curr_col == "yellow" || (curr_col == "red" && (curr_pos.y >= 590.2 || curr_pos.y <= 588)))
+                                    if (curr_col == "green" || ((curr_col == "red" || curr_col=="yellow") && (curr_pos.y >= 590.2 || curr_pos.y <= 588)))
                                     {
                                         if (x == (Roads[i].get_list_of_lane() + j)->get_list_vehicles()->begin())
                                         {
@@ -321,17 +333,17 @@ int main(int argc, char *args[])
             }
             else if (rand2 == 4)
             {
-                Bus p_vehicle = Bus(spawn_pos, rand0, rand1, 10, busImg_0);
+                Bus p_vehicle = Bus(spawn_pos, rand0, rand1, 8, busImg_0);
                 (Roads[rand0].get_list_of_lane() + rand1)->addVehicle(p_vehicle);
             }
             else if (rand2 == 5)
             {
-                Bus p_vehicle = Bus(spawn_pos, rand0, rand1, 10, busImg_1);
+                Bus p_vehicle = Bus(spawn_pos, rand0, rand1, 8, busImg_1);
                 (Roads[rand0].get_list_of_lane() + rand1)->addVehicle(p_vehicle);
             }
             else if (rand2 == 6)
             {
-                Bus p_vehicle = Bus(spawn_pos, rand0, rand1, 10, busImg_2);
+                Bus p_vehicle = Bus(spawn_pos, rand0, rand1, 8, busImg_2);
                 (Roads[rand0].get_list_of_lane() + rand1)->addVehicle(p_vehicle);
             }
             else if (rand2 == 7)
