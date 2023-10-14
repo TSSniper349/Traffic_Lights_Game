@@ -9,5 +9,5 @@ Motorbike::Motorbike(Coordination p_pos,short int road, short int p_lane, SDL_Te
     Vehicle::set_center(0,0);
     Vehicle::set_angle(road,p_lane);
     Vehicle::set_direction(road);
-    NormalVehicle::set_capacity(1);
+    Vehicle::set_capacity(1);
 }
