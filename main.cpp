@@ -1,7 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL_image.h>
-#include <SDL2_gfxPrimitives.h>
 #include <iostream>
 #include <vector>
 #include <string>
@@ -129,13 +128,10 @@ int main() {
                             // Render the instruction title text
                             instructionTitle.display(250, 150, renderer);
 
-                            // Render the white box with curved corners
-                            Sint16 x_box = 80;
-                            Sint16 y_box = 250;
-                            Sint16 w_box = 800;
-                            Sint16 h_box = 800;
-                            Sint16 radius_box = 20;
-                            roundedBoxRGBA(renderer, x_box, y_box, x_box + w_box, y_box + h_box, radius_box, 255, 255, 255, 200);
+                            // Render the white box
+                            SDL_Rect boxRect = { 80, 250, 800, 800 };
+                            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
+                            SDL_RenderFillRect(renderer, &boxRect);
 
                             // Render text
                             instruction.display(100, 250, renderer);
@@ -181,13 +177,10 @@ int main() {
                             // Render the high scores title text
                             highscoresTitle.display(250, 150, renderer);
 
-                            // Render the white box with curved corners
-                            Sint16 x_box = 80;
-                            Sint16 y_box = 250;
-                            Sint16 w_box = 800;
-                            Sint16 h_box = 600;
-                            Sint16 radius_box = 20;
-                            roundedBoxRGBA(renderer, x_box, y_box, x_box + w_box, y_box + h_box, radius_box, 255, 255, 255, 200);
+                            // Render the white box
+                            SDL_Rect boxRect = { 80, 250, 800, 800 };
+                            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
+                            SDL_RenderFillRect(renderer, &boxRect);
 
                             Date.display(100, 250, renderer);
                             Player.display(400, 250, renderer);
