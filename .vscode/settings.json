@@ -47,7 +47,23 @@
         "xtr1common": "cpp",
         "xutility": "cpp",
         "string": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "array": "cpp",
+        "*.tcc": "cpp",
+        "cstdarg": "cpp",
+        "cwctype": "cpp",
+        "unordered_map": "cpp",
+        "functional": "cpp",
+        "memory_resource": "cpp",
+        "numeric": "cpp",
+        "optional": "cpp",
+        "random": "cpp",
+        "ratio": "cpp",
+        "string_view": "cpp",
+        "fstream": "cpp",
+        "sstream": "cpp",
+        "thread": "cpp",
+        "cinttypes": "cpp"
     },
     "C_Cpp.default.compilerPath": "D:\\Program Files\\MinGW\\bin\\gcc.exe"
 }

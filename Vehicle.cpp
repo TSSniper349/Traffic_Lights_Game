@@ -1,10 +1,5 @@
 #include"Vehicle.h"
 
-void Vehicle::set_center(float x, float y) {
-    center.x = x;
-    center.y = y;
-}
-
 void Vehicle::go() {
     if(direction == 0) {
         if(angle<90) angle+=0.01;
@@ -28,9 +23,6 @@ void Vehicle::go() {
         else if(angle>0) angle-=0.01;
         pos.y-=0.1*speed;
     }
-}
-
-void Vehicle::stop() {
 }
 
 void Vehicle::turnLeft() {

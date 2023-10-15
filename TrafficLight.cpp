@@ -5,30 +5,30 @@ using namespace std;
 
 
 TrafficLight::TrafficLight(SDL_Renderer *renderer, short int x, short int y,const string &image_path,int countdown_time): 
-_w(30), _h(45), _x(x), _y(y), _curr_color("red"), _countdown_time(countdown_time), check(0) {
-    pos.x = x; pos.y = y;
+_curr_color("red"), _countdown_time(countdown_time), check(0) {
+    Enity::set_pos(Coordination(x,y));
+    Enity::set_frame(33,88);
     timer = CountdownTimer(countdown_time);
     auto surface = IMG_Load(image_path.c_str());
 
     if (!surface){
         cout << "Failed to create surface" << " " << image_path.c_str() <<  endl;
     }
-    _TrafficLight_texture = SDL_CreateTextureFromSurface(renderer, surface);
-    if(!_TrafficLight_texture){
+    tex = SDL_CreateTextureFromSurface(renderer, surface);
+    if(!tex){
         cout << "Failed to create texture" << endl;
     }
 }
 
 TrafficLight::TrafficLight() {}
 
-SDL_Texture* TrafficLight::get_texture(){
-    return _TrafficLight_texture;
-}
-
 void TrafficLight::display(SDL_Renderer *renderer) {
-    SDL_Rect rect = {_x, _y, _w, _h};
- //   cout << _x << " " << _y << " " << _w << " " << _h << endl;
-    SDL_RenderCopy(renderer,_TrafficLight_texture,nullptr, &rect);
+    SDL_Rect dst;
+    dst.x = pos.x;
+    dst.y = pos.y;
+    dst.w = frame.w/1.4;
+    dst.h = frame.h/1.4;
+    SDL_RenderCopy(renderer,tex,&frame,&dst);
 }
 
 string TrafficLight::get_curr_color(){
@@ -44,9 +44,9 @@ void TrafficLight::ChangeColor(SDL_Renderer *renderer,const string &img_path, st
     if (!surface){
         cout << "Failed to create surface" << " " << img_path.c_str() <<  endl;
     }
-    SDL_DestroyTexture(_TrafficLight_texture);
-    _TrafficLight_texture = SDL_CreateTextureFromSurface(renderer, surface);
-    if(!_TrafficLight_texture){
+    SDL_DestroyTexture(tex);
+    tex = SDL_CreateTextureFromSurface(renderer, surface);
+    if(!tex){
         cout << "Failed to create texture" << endl;
     }
     _curr_color = color;
@@ -97,5 +97,5 @@ void TrafficLight::pollEvents(){
 }
 
 TrafficLight::~TrafficLight(){
-    SDL_DestroyTexture(_TrafficLight_texture);
+    SDL_DestroyTexture(tex);
 }

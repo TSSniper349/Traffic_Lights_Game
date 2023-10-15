@@ -18,4 +18,6 @@ class Enity {
         void set_pos(Coordination p_pos) {pos = p_pos;};
         void set_tex(SDL_Texture* p_tex) {tex = p_tex;};
         void set_frame(short int w, short int h);
+
+        ~Enity();
 };

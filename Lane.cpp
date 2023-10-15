@@ -5,7 +5,7 @@ Lane::Lane(): Lane(Coordination(0,0)) {}
 
 Lane::Lane(Coordination p_pos) {
     list_vehicles = new std::vector<Vehicle>;
-    max_length = 400;
+    max_length = 450;
     pos = p_pos;
     curr_length = 0;
 }

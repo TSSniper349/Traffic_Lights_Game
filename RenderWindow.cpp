@@ -70,9 +70,12 @@ void RenderWindow::renderVehicle(std::vector<Vehicle> *p_vehicles) {
         dst.y = i->get_pos().y;
         dst.w = i->get_frame().w;
         dst.h = i->get_frame().h;
+        SDL_Point center;
+        center.x = 0;
+        center.y = 0;
 
         SDL_RendererFlip flip = SDL_FLIP_NONE;
-        SDL_RenderCopyEx(renderer, i->get_tex(), &src, &dst, i->get_angle(), &i->get_center(), flip);
+        SDL_RenderCopyEx(renderer, i->get_tex(), &src, &dst, i->get_angle(), &center, flip);
     }
 }
 

@@ -43,8 +43,8 @@ int main(int argc, char *args[])
     SDL_Texture *motorImg_1 = window.loadTexture("res/gfx/motorImg_1.png");
     SDL_Texture *motorImg_2 = window.loadTexture("res/gfx/motorImg_2.png");
 
-    TrafficLight *trafficlightLeft = new TrafficLight(window.render(), 340, 330, "res/gfx/red.png", 6);
-    TrafficLight *trafficlightTop = new TrafficLight(window.render(), 590, 330, "res/gfx/red.png", 6);
+    TrafficLight *trafficlightLeft = new TrafficLight(window.render(), 340, 320, "res/gfx/red.png", 6);
+    TrafficLight *trafficlightTop = new TrafficLight(window.render(), 590, 320, "res/gfx/red.png", 6);
     TrafficLight *trafficlightBottom = new TrafficLight(window.render(), 340, 590, "res/gfx/red.png", 6);
     TrafficLight *trafficlightRight = new TrafficLight(window.render(), 590, 590, "res/gfx/red.png", 6);
 
@@ -67,6 +67,7 @@ int main(int argc, char *args[])
     float accumulator = 0.0f;
     float accumulator2 = 0.0f;
     float spawnTime = 0.0f;
+    float spawn_speed = 0.000f;
 
     Roads[0].add_TrafficLight(trafficlightLeft);
     Roads[1].add_TrafficLight(trafficlightRight);
@@ -89,6 +90,15 @@ int main(int argc, char *args[])
 
     while (gameRunning)
     {
+        float startTick = SDL_GetTicks64();
+
+        float newTime = utils::hireTimeInSeconds();
+        float frameTime = newTime - currentTime;
+
+        currentTime = newTime;
+        accumulator += frameTime;
+        accumulator2 += frameTime;
+        spawnTime += frameTime;
 
         while (SDL_PollEvent(&event) && event.type == SDL_KEYDOWN)
         {
@@ -151,15 +161,18 @@ int main(int argc, char *args[])
             }
         }
 
-        float startTick = SDL_GetTicks64();
+        if(_score<=100) {
+            spawn_speed = 80;
+        } else if(_score<=300) {
+            spawn_speed = 60;
+        } else if(_score<=600) {
+            spawn_speed = 45;
+        } else if (_score<=1000) {
+            spawn_speed = 35;
+        } else {
+            spawn_speed = 30;
+        }
 
-        float newTime = utils::hireTimeInSeconds();
-        float frameTime = newTime - currentTime;
-
-        currentTime = newTime;
-        accumulator += frameTime;
-        accumulator2 += frameTime;
-        spawnTime += frameTime;
         _main_score = "Score: " + to_string(_score);
         Text main_score(window.render(), "res/dev/Blockletter.otf", 25, _main_score, {82, 82, 82});
 
@@ -320,7 +333,7 @@ int main(int argc, char *args[])
             accumulator -= timeStep;
         }
 
-        if (spawnTime >= 60 * timeStep)
+        if (spawnTime >= spawn_speed*timeStep)
         {
             short int rand0 = std::rand() % 4;
             short int rand1 = std::rand() % 3;
@@ -331,19 +344,34 @@ int main(int argc, char *args[])
                 Car p_vehicle = Car(spawn_pos, rand0, rand1, 1, carImg_0);
                 (Roads[rand0].get_list_of_lane() + rand1)->addVehicle(p_vehicle);
             }
+            if (rand2 == 1)
+            {
+                Car p_vehicle = Car(spawn_pos, rand0, rand1, 2, carImg_1);
+                (Roads[rand0].get_list_of_lane() + rand1)->addVehicle(p_vehicle);
+            }
+            if (rand2 == 2)
+            {
+                Car p_vehicle = Car(spawn_pos, rand0, rand1, 3, carImg_2);
+                (Roads[rand0].get_list_of_lane() + rand1)->addVehicle(p_vehicle);
+            }
+            if (rand2 == 3)
+            {
+                Car p_vehicle = Car(spawn_pos, rand0, rand1, 4, carImg_3);
+                (Roads[rand0].get_list_of_lane() + rand1)->addVehicle(p_vehicle);
+            }
             else if (rand2 == 4)
             {
-                Bus p_vehicle = Bus(spawn_pos, rand0, rand1, 8, busImg_0);
+                Bus p_vehicle = Bus(spawn_pos, rand0, rand1, 5, busImg_0);
                 (Roads[rand0].get_list_of_lane() + rand1)->addVehicle(p_vehicle);
             }
             else if (rand2 == 5)
             {
-                Bus p_vehicle = Bus(spawn_pos, rand0, rand1, 8, busImg_1);
+                Bus p_vehicle = Bus(spawn_pos, rand0, rand1, 6, busImg_1);
                 (Roads[rand0].get_list_of_lane() + rand1)->addVehicle(p_vehicle);
             }
             else if (rand2 == 6)
             {
-                Bus p_vehicle = Bus(spawn_pos, rand0, rand1, 8, busImg_2);
+                Bus p_vehicle = Bus(spawn_pos, rand0, rand1, 7, busImg_2);
                 (Roads[rand0].get_list_of_lane() + rand1)->addVehicle(p_vehicle);
             }
             else if (rand2 == 7)
@@ -362,7 +390,7 @@ int main(int argc, char *args[])
                 (Roads[rand0].get_list_of_lane() + rand1)->addVehicle(p_vehicle);
             }
             // std::cout<<lane[rand].get_curr_length();
-            spawnTime -= 60 * timeStep;
+            spawnTime -= spawn_speed*timeStep;
         }
 
         window.clear();
@@ -380,7 +408,7 @@ int main(int argc, char *args[])
 
                 _curr_time[i] = TrafficLight_list[i]->get_timer();
                 TrafficLight_list[i]->set_countdowntime(_curr_time[i]);
-                cntLight[i] = Text(window.render(), "res/dev/Blockletter.otf", 18, to_string(_curr_time[i]), {82, 82, 82});
+                cntLight[i] = Text(window.render(), "res/dev/Blockletter.otf", 18, to_string(_curr_time[i]), {50, 50, 50});
 
                 if (_curr_time[i] == 0)
                 {
@@ -388,9 +416,9 @@ int main(int argc, char *args[])
                     TrafficLight_list[i]->set_countdowntime(2);
                     TrafficLight_list[i]->set_timer(2);
                     _curr_time[i] = 2;
-                    cntLight[i] = Text(window.render(), "res/dev/Blockletter.otf", 18, to_string(_curr_time[i]), {82, 82, 82});
+                    cntLight[i] = Text(window.render(), "res/dev/Blockletter.otf", 18, to_string(_curr_time[i]), {50, 50, 50});
                 }
-                cntLight[i].display(pos.x + 9, pos.y - 25, window.render());
+                cntLight[i].display(pos.x + 6, pos.y - 24, window.render());
             }
             else if (TrafficLight_list[i]->get_curr_color() == "yellow")
             {
@@ -399,7 +427,7 @@ int main(int argc, char *args[])
 
                 _curr_time[i] = TrafficLight_list[i]->get_timer();
                 TrafficLight_list[i]->set_countdowntime(_curr_time[i]);
-                cntLight[i] = Text(window.render(), "res/dev/Blockletter.otf", 18, to_string(_curr_time[i]), {82, 82, 82});
+                cntLight[i] = Text(window.render(), "res/dev/Blockletter.otf", 18, to_string(_curr_time[i]), {50, 50, 50});
                 // scout << _curr_time << " seconds remaining" << endl;
                 // cout << tmp << " " << 0 << endl;
 
@@ -410,14 +438,14 @@ int main(int argc, char *args[])
                     TrafficLight_list[i]->set_countdowntime(6);
                     TrafficLight_list[i]->set_timer(6);
                     _curr_time[i] = 6;
-                    cntLight[i] = Text(window.render(), "res/dev/Blockletter.otf", 18, to_string(_curr_time[i]), {82, 82, 82});
+                    cntLight[i] = Text(window.render(), "res/dev/Blockletter.otf", 18, to_string(_curr_time[i]), {50, 50, 50});
                 }
-                cntLight[i].display(pos.x + 9, pos.y - 25, window.render());
+                cntLight[i].display(pos.x + 6, pos.y - 24, window.render());
             }
             else
             {
                 Text nothing = Text(window.render(), "res/dev/Blockletter.otf", 18, "--", {50, 50, 50});
-                nothing.display(pos.x + 8, pos.y - 20, window.render());
+                nothing.display(pos.x + 5, pos.y - 20, window.render());
             }
         }
         for (short int i = 0; i < 4; i++)

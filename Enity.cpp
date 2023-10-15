@@ -25,3 +25,7 @@ void Enity::set_frame(short int w, short int h) {
     frame.w = w;
     frame.h = h;
 }
+
+Enity::~Enity() {
+    //SDL_DestroyTexture(tex);
+}
