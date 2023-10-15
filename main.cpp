@@ -7,7 +7,7 @@
 #include <cstdlib>
 #include <time.h>
 #include "RenderWindow.h"
-#include "Car.h"
+#include "car.h"
 #include "Bus.h"
 #include "Motorbike.h"
 #include "Enity.h"
@@ -74,12 +74,6 @@ int main(int argc, char *args[])
     Roads[2].add_TrafficLight(trafficlightTop);
     Roads[3].add_TrafficLight(trafficlightBottom);
 
-    TrafficLight **TrafficLight_list;
-    for (short int i = 0; i < 4; i++)
-    {
-        TrafficLight_list[i] = Roads[i].get_trafficlight();
-    }
-
     int check = 0;
     // CountdownTimer timer(10);
     int _curr_time[4] = {6, 6, 6, 6};
@@ -102,74 +96,83 @@ int main(int argc, char *args[])
 
         while (SDL_PollEvent(&event) && event.type == SDL_KEYDOWN)
         {
-            if (event.key.keysym.sym == SDLK_a&&
-            TrafficLight_list[1]->get_curr_color()=="red"&&
-            TrafficLight_list[2]->get_curr_color()=="red"&&
-            TrafficLight_list[3]->get_curr_color()=="red")
+            if (event.key.keysym.sym == SDLK_a &&
+                Roads[1].get_trafficlight()->get_curr_color() == "red" &&
+                Roads[2].get_trafficlight()->get_curr_color() == "red" &&
+                Roads[3].get_trafficlight()->get_curr_color() == "red")
             {
                 // cout<<"1";
-                if (TrafficLight_list[0]->get_curr_color() == "red")
-                    TrafficLight_list[0]->set_color("green");
-                else if (TrafficLight_list[0]->get_curr_color() == "green")
+                if (Roads[0].get_trafficlight()->get_curr_color() == "red")
+                    Roads[0].get_trafficlight()->set_color("green");
+                else if (Roads[0].get_trafficlight()->get_curr_color() == "green")
                 {
-                    TrafficLight_list[0]->set_countdowntime(6);
-                    TrafficLight_list[0]->set_timer(6);
+                    Roads[0].get_trafficlight()->set_countdowntime(6);
+                    Roads[0].get_trafficlight()->set_timer(6);
                     _curr_time[0] = 6;
                 }
             }
-            else if (event.key.keysym.sym == SDLK_d&&
-            TrafficLight_list[0]->get_curr_color()=="red"&&
-            TrafficLight_list[2]->get_curr_color()=="red"&&
-            TrafficLight_list[3]->get_curr_color()=="red")
+            else if (event.key.keysym.sym == SDLK_d &&
+                     Roads[0].get_trafficlight()->get_curr_color() == "red" &&
+                     Roads[2].get_trafficlight()->get_curr_color() == "red" &&
+                     Roads[3].get_trafficlight()->get_curr_color() == "red")
             {
-                if (TrafficLight_list[1]->get_curr_color() == "red")
-                    TrafficLight_list[1]->set_color("green");
-                else if (TrafficLight_list[1]->get_curr_color() == "green")
+                if (Roads[1].get_trafficlight()->get_curr_color() == "red")
+                    Roads[1].get_trafficlight()->set_color("green");
+                else if (Roads[1].get_trafficlight()->get_curr_color() == "green")
                 {
-                    TrafficLight_list[1]->set_countdowntime(6);
-                    TrafficLight_list[1]->set_timer(6);
+                    Roads[1].get_trafficlight()->set_countdowntime(6);
+                    Roads[1].get_trafficlight()->set_timer(6);
                     _curr_time[1] = 6;
                 }
             }
-            else if (event.key.keysym.sym == SDLK_w&&
-            TrafficLight_list[0]->get_curr_color()=="red"&&
-            TrafficLight_list[1]->get_curr_color()=="red"&&
-            TrafficLight_list[3]->get_curr_color()=="red")
+            else if (event.key.keysym.sym == SDLK_w &&
+                     Roads[0].get_trafficlight()->get_curr_color() == "red" &&
+                     Roads[1].get_trafficlight()->get_curr_color() == "red" &&
+                     Roads[3].get_trafficlight()->get_curr_color() == "red")
             {
-                if (TrafficLight_list[2]->get_curr_color() == "red")
-                    TrafficLight_list[2]->set_color("green");
-                else if (TrafficLight_list[2]->get_curr_color() == "green")
+                if (Roads[2].get_trafficlight()->get_curr_color() == "red")
+                    Roads[2].get_trafficlight()->set_color("green");
+                else if (Roads[2].get_trafficlight()->get_curr_color() == "green")
                 {
-                    TrafficLight_list[2]->set_countdowntime(6);
-                    TrafficLight_list[2]->set_timer(6);
+                    Roads[2].get_trafficlight()->set_countdowntime(6);
+                    Roads[2].get_trafficlight()->set_timer(6);
                     _curr_time[2] = 6;
                 }
             }
-            else if (event.key.keysym.sym == SDLK_s&&
-            TrafficLight_list[0]->get_curr_color()=="red"&&
-            TrafficLight_list[1]->get_curr_color()=="red"&&
-            TrafficLight_list[2]->get_curr_color()=="red")
+            else if (event.key.keysym.sym == SDLK_s &&
+                     Roads[0].get_trafficlight()->get_curr_color() == "red" &&
+                     Roads[1].get_trafficlight()->get_curr_color() == "red" &&
+                     Roads[2].get_trafficlight()->get_curr_color() == "red")
             {
-                if (TrafficLight_list[3]->get_curr_color() == "red")
-                    TrafficLight_list[3]->set_color("green");
-                else if (TrafficLight_list[3]->get_curr_color() == "green")
+                if (Roads[3].get_trafficlight()->get_curr_color() == "red")
+                    Roads[3].get_trafficlight()->set_color("green");
+                else if (Roads[3].get_trafficlight()->get_curr_color() == "green")
                 {
-                    TrafficLight_list[3]->set_countdowntime(6);
-                    TrafficLight_list[3]->set_timer(6);
+                    Roads[3].get_trafficlight()->set_countdowntime(6);
+                    Roads[3].get_trafficlight()->set_timer(6);
                     _curr_time[3] = 6;
                 }
             }
         }
 
-        if(_score<=100) {
+        if (_score <= 100)
+        {
             spawn_speed = 80;
-        } else if(_score<=300) {
+        }
+        else if (_score <= 300)
+        {
             spawn_speed = 60;
-        } else if(_score<=600) {
+        }
+        else if (_score <= 600)
+        {
             spawn_speed = 45;
-        } else if (_score<=1000) {
+        }
+        else if (_score <= 1000)
+        {
             spawn_speed = 35;
-        } else {
+        }
+        else
+        {
             spawn_speed = 30;
         }
 
@@ -191,7 +194,7 @@ int main(int argc, char *args[])
                             short int p_lane = x->get_lane();
                             float length = x->get_length();
                             short int dir = x->get_direction();
-                            string curr_col = TrafficLight_list[i]->get_curr_color();
+                            string curr_col = Roads[i].get_trafficlight()->get_curr_color();
                             if (curr_pos.x >= 370 && curr_pos.x <= 590 && curr_pos.y >= 370 && curr_pos.y <= 590)
                             {
                                 (Roads[i].get_list_of_lane() + j)->vehicleThrough(x);
@@ -225,7 +228,7 @@ int main(int argc, char *args[])
                             {
                                 if (dir == 0)
                                 {
-                                    if (curr_col == "green" || ((curr_col == "red" || curr_col=="yellow") && (curr_pos.x <= 369.8 || curr_pos.x >= 372)))
+                                    if (curr_col == "green" || ((curr_col == "red" || curr_col == "yellow") && (curr_pos.x <= 369.8 || curr_pos.x >= 372)))
                                     {
                                         if (x == (Roads[i].get_list_of_lane() + j)->get_list_vehicles()->begin())
                                         {
@@ -242,7 +245,7 @@ int main(int argc, char *args[])
                                 }
                                 if (dir == 1)
                                 {
-                                    if (curr_col == "green" || ((curr_col == "red" || curr_col=="yellow") && (curr_pos.x <= 588 || curr_pos.x >= 590.2)))
+                                    if (curr_col == "green" || ((curr_col == "red" || curr_col == "yellow") && (curr_pos.x <= 588 || curr_pos.x >= 590.2)))
                                     {
                                         if (x == (Roads[i].get_list_of_lane() + j)->get_list_vehicles()->begin())
                                         {
@@ -259,7 +262,7 @@ int main(int argc, char *args[])
                                 }
                                 if (dir == 2)
                                 {
-                                    if (curr_col == "green" || ((curr_col == "red" || curr_col=="yellow") && (curr_pos.y <= 369.8 || curr_pos.y >= 372)))
+                                    if (curr_col == "green" || ((curr_col == "red" || curr_col == "yellow") && (curr_pos.y <= 369.8 || curr_pos.y >= 372)))
                                     {
                                         if (x == (Roads[i].get_list_of_lane() + j)->get_list_vehicles()->begin())
                                         {
@@ -276,7 +279,7 @@ int main(int argc, char *args[])
                                 }
                                 if (dir == 3)
                                 {
-                                    if (curr_col == "green" || ((curr_col == "red" || curr_col=="yellow") && (curr_pos.y >= 590.2 || curr_pos.y <= 588)))
+                                    if (curr_col == "green" || ((curr_col == "red" || curr_col == "yellow") && (curr_pos.y >= 590.2 || curr_pos.y <= 588)))
                                     {
                                         if (x == (Roads[i].get_list_of_lane() + j)->get_list_vehicles()->begin())
                                         {
@@ -333,7 +336,7 @@ int main(int argc, char *args[])
             accumulator -= timeStep;
         }
 
-        if (spawnTime >= spawn_speed*timeStep)
+        if (spawnTime >= spawn_speed * timeStep)
         {
             short int rand0 = std::rand() % 4;
             short int rand1 = std::rand() % 3;
@@ -390,7 +393,7 @@ int main(int argc, char *args[])
                 (Roads[rand0].get_list_of_lane() + rand1)->addVehicle(p_vehicle);
             }
             // std::cout<<lane[rand].get_curr_length();
-            spawnTime -= spawn_speed*timeStep;
+            spawnTime -= spawn_speed * timeStep;
         }
 
         window.clear();
@@ -400,43 +403,43 @@ int main(int argc, char *args[])
 
         for (short int i = 0; i < 4; i++)
         {
-            Coordination pos = TrafficLight_list[i]->get_pos();
-            if (TrafficLight_list[i]->get_curr_color() == "green")
+            Coordination pos = Roads[i].get_trafficlight()->get_pos();
+            if (Roads[i].get_trafficlight()->get_curr_color() == "green")
             {
                 if (_curr_time[i] == 6)
-                    TrafficLight_list[i]->ChangeColor(window.render(), "res/gfx/green.png", "green");
+                    Roads[i].get_trafficlight()->ChangeColor(window.render(), "res/gfx/green.png", "green");
 
-                _curr_time[i] = TrafficLight_list[i]->get_timer();
-                TrafficLight_list[i]->set_countdowntime(_curr_time[i]);
+                _curr_time[i] = Roads[i].get_trafficlight()->get_timer();
+                Roads[i].get_trafficlight()->set_countdowntime(_curr_time[i]);
                 cntLight[i] = Text(window.render(), "res/dev/Blockletter.otf", 18, to_string(_curr_time[i]), {50, 50, 50});
 
                 if (_curr_time[i] == 0)
                 {
-                    TrafficLight_list[i]->set_color("yellow");
-                    TrafficLight_list[i]->set_countdowntime(2);
-                    TrafficLight_list[i]->set_timer(2);
+                    Roads[i].get_trafficlight()->set_color("yellow");
+                    Roads[i].get_trafficlight()->set_countdowntime(2);
+                    Roads[i].get_trafficlight()->set_timer(2);
                     _curr_time[i] = 2;
                     cntLight[i] = Text(window.render(), "res/dev/Blockletter.otf", 18, to_string(_curr_time[i]), {50, 50, 50});
                 }
                 cntLight[i].display(pos.x + 6, pos.y - 24, window.render());
             }
-            else if (TrafficLight_list[i]->get_curr_color() == "yellow")
+            else if (Roads[i].get_trafficlight()->get_curr_color() == "yellow")
             {
                 if (_curr_time[i] == 2)
-                    TrafficLight_list[i]->ChangeColor(window.render(), "res/gfx/yellow.png", "yellow");
+                    Roads[i].get_trafficlight()->ChangeColor(window.render(), "res/gfx/yellow.png", "yellow");
 
-                _curr_time[i] = TrafficLight_list[i]->get_timer();
-                TrafficLight_list[i]->set_countdowntime(_curr_time[i]);
+                _curr_time[i] = Roads[i].get_trafficlight()->get_timer();
+                Roads[i].get_trafficlight()->set_countdowntime(_curr_time[i]);
                 cntLight[i] = Text(window.render(), "res/dev/Blockletter.otf", 18, to_string(_curr_time[i]), {50, 50, 50});
                 // scout << _curr_time << " seconds remaining" << endl;
                 // cout << tmp << " " << 0 << endl;
 
                 if (_curr_time[i] == 0)
                 {
-                    TrafficLight_list[i]->set_color("red");
-                    TrafficLight_list[i]->ChangeColor(window.render(), "res/gfx/red.png", "red");
-                    TrafficLight_list[i]->set_countdowntime(6);
-                    TrafficLight_list[i]->set_timer(6);
+                    Roads[i].get_trafficlight()->set_color("red");
+                    Roads[i].get_trafficlight()->ChangeColor(window.render(), "res/gfx/red.png", "red");
+                    Roads[i].get_trafficlight()->set_countdowntime(6);
+                    Roads[i].get_trafficlight()->set_timer(6);
                     _curr_time[i] = 6;
                     cntLight[i] = Text(window.render(), "res/dev/Blockletter.otf", 18, to_string(_curr_time[i]), {50, 50, 50});
                 }
@@ -450,7 +453,7 @@ int main(int argc, char *args[])
         }
         for (short int i = 0; i < 4; i++)
         {
-            TrafficLight_list[i]->display(window.render());
+            Roads[i].get_trafficlight()->display(window.render());
         }
 
         window.display();

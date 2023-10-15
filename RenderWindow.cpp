@@ -9,6 +9,7 @@ RenderWindow::RenderWindow(const char* p_title, short int p_w, short int p_h): w
     }
 
     renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED);
+
 }
 
 SDL_Renderer* RenderWindow::render() {
