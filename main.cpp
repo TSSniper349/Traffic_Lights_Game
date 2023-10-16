@@ -18,6 +18,9 @@
 #include <sstream>
 #include <cstring>
 #include <iostream>
+#include "Button.h"
+#include "Instruction.h"
+#include "HighScores.h"
 using namespace std;
 
 bool saveScreenshot(SDL_Renderer* renderer, const char* filename) {
@@ -149,6 +152,26 @@ int main(int argc, char *args[])
                      Road("Top"),
                      Road("Bottom")};
 
+    Text gameTitle(window.render(), "res/dev/Blockletter.otf", 72, "TRAFFIC LIGHTS GAME", { 0, 0, 0, 0});
+    Text highscoresTitle(window.render(), "res/dev/Blockletter.otf", 72, "HIGH SCORES", { 0, 0, 255, 0});
+    Text Date(window.render(), "res/dev/Blockletter.otf", 40, "Date", { 0, 0, 0, 255});
+    Text Player(window.render(), "res/dev/Blockletter.otf", 40, "Player", { 0, 0, 0, 255});
+    Text Score(window.render(), "res/dev/Blockletter.otf", 40, "Score", { 0, 0, 0, 255});
+    Text instructionTitle(window.render(), "res/dev/Blockletter.otf", 72, "INSTRUCTION", { 0, 0, 255, 0});
+    string instructionText = "Objective:\n - To control the traffic lights and manage the flow of traffic to avoid accidents and ensure smooth traffic movement.\n\nControl:\n - Use the W, A, S, D key to control the traffic light at\nthe top, left, bottom, right lane respectively.\n\nScoring:\n - Motorbikes give 1 pt, cars give 1-4 pts based on\nthe vehicle's color and buses give 5-7 pts.\n\n Conditions:\n - The player loses the game if a vehicle touches the edge of the window.";
+    Text instruction(window.render(), "res/dev/Blockletter.otf", 32, instructionText, { 0, 0, 255, 0}, "Instruction");
+
+    std::vector<Button> buttons;
+    buttons.emplace_back(380, 300, 200, 50, "START", window.render());
+    buttons.emplace_back(380, 400, 200, 50, "HIGH SCORES", window.render());
+    buttons.emplace_back(380, 500, 200, 50, "INSTRUCTION", window.render());
+    buttons.emplace_back(380, 600, 200, 50, "EXIT", window.render());
+
+    Instruction instructionWindow("res/dev/Blockletter.otf");
+    HighScores highscoresWindow("res/dev/Blockletter.otf");
+
+    //vector<tuple<string, string, int> > highScores = highscoresWindow.readHighScoresFromFile("score_data.txt");
+
     int _score = 0;
     std::string _main_score = "";
 
@@ -175,6 +198,7 @@ int main(int argc, char *args[])
     float currentTime = utils::hireTimeInSeconds();
     srand(time(0));
 
+    bool main_menu = true;
     bool _gameOver = false;
     SDL_Texture* gameOverBg;
     Enity gameOverBackGround;
@@ -183,20 +207,155 @@ int main(int argc, char *args[])
     string _curr_score = "";
     bool oneTimeAction = true;
     
-    Text gameOver_text;
+    Text gameOver_text = Text(window.render(),"res/dev/Blockletter.otf",100,"Game Over", {51,0,0});
     Text Best_score;
     Text curr_score;
 
     while (gameRunning)
     {
+        while(main_menu!=false) {
+            float startTick = SDL_GetTicks64();
+            float newTime = utils::hireTimeInSeconds();
+            float frameTime = newTime - currentTime;
+            currentTime = newTime;
+            accumulator += frameTime;
+
+            while(SDL_PollEvent(&event)) if (event.type == SDL_MOUSEBUTTONDOWN) {
+                int mouseX, mouseY;
+                SDL_GetMouseState(&mouseX, &mouseY);
+                for (const Button& button : buttons) {
+                    if (button.IsClicked(mouseX, mouseY)) {
+                        if (button.GetText() == "EXIT") {
+                            gameRunning = false;
+                            main_menu = false;
+                        }
+                        if(button.GetText() == "START") {
+                            main_menu = false;
+                        }
+                        else if (button.GetText() == "INSTRUCTION") {
+                            // Render instruction window
+                            window.clear();
+                            //instructionWindow.Render(window.render(), 960, 960);
+                            window.renderBackground(mainBackground);
+                            instructionTitle.display(250, 150, window.render());
+
+                            // Render the white box
+                            SDL_Rect boxRect = { 80, 250, 800, 800 };
+                            SDL_RenderFillRect(window.render(), &boxRect);
+                            //instruction.display(100, 250, window.render());
+                            window.display();
+
+                            // Wait for a key press to exit the instruction window
+                            bool instructionWindowOpen = true;
+                            while (instructionWindowOpen) {
+                                while (SDL_PollEvent(&event) != 0 && event.key.keysym.sym == SDLK_ESCAPE) {
+                                    if (event.type == SDL_QUIT) {
+                                        gameRunning = false;
+                                        instructionWindowOpen = false;
+                                    }
+                                    else if (event.type == SDL_KEYDOWN) {
+                                        instructionWindowOpen = false;
+                                    }
+                                }
+                            }
+                        }
+                        // else if (button.GetText() == "HIGH SCORES") {
+                        //     // Render high scores window
+                        //     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+                        //     SDL_RenderClear(renderer);
+                        //     highscoresWindow.Render(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+                        //     SDL_RenderPresent(renderer);
+
+                        //     // Render background image
+                        //     SDL_RenderClear(renderer);
+                        //     renderTexture(Background, renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+                        //     // Render the high scores title text
+                        //     highscoresTitle.display(250, 150, renderer);
+
+                        //     // Render the white box
+                        //     SDL_Rect boxRect = { 80, 250, 800, 800 };
+                        //     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
+                        //     SDL_RenderFillRect(renderer, &boxRect);
+
+                        //     Date.display(100, 250, renderer);
+                        //     Player.display(400, 250, renderer);
+                        //     Score.display(700, 250, renderer);
+
+                        //     // Render the high scores
+                        //     int highscore_height = 300;
+                        //     for (const auto& score : highScores)
+                        //     {
+                        //         std::string date = std::get<0>(score);
+                        //         std::string player = std::get<1>(score);
+                        //         int scoreValue = std::get<2>(score);
+                        //         std::string score_str = to_string(scoreValue);
+
+                        //         Text date_data(renderer, "/Resource/Aller/Aller_Rg.ttf", 40, date.c_str(), { 0, 0, 0, 255}, "Normal");
+                        //         Text player_data(renderer, "/Resource/Aller/Aller_Rg.ttf", 40, player.c_str(), { 0, 0, 0, 255}, "Normal");
+                        //         Text score_data(renderer, "/Resource/Aller/Aller_Rg.ttf", 40, score_str.c_str(), { 0, 0, 0, 255}, "Normal");
+
+                        //         date_data.display(100, highscore_height, renderer);
+                        //         player_data.display(400, highscore_height, renderer);
+                        //         score_data.display(700, highscore_height, renderer);
+
+                        //         highscore_height += 50;
+                        //     }
+                        //     SDL_RenderPresent(renderer);
+
+                        //     // Wait for a key press to exit the highscore window
+                        //     bool highscoresWindowOpen = true;
+                        //     while (highscoresWindowOpen) {
+                        //         while (SDL_PollEvent(&e) != 0 && e.key.keysym.sym == SDLK_ESCAPE) {
+                        //             if (e.type == SDL_QUIT) {
+                        //                 quit = true;
+                        //                 highscoresWindowOpen = false;
+                        //             }
+                        //             else if (e.type == SDL_KEYDOWN) {
+                        //                 highscoresWindowOpen = false;
+                        //             }
+                        //         }
+                        //     }
+
+                        //     // Render main menu again
+                        //     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+                        //     SDL_RenderClear(renderer);
+                        //     // Render buttons
+                        //     buttons[0].Render(435, 305,renderer);
+                        //     buttons[1].Render(385, 405,renderer);
+                        //     buttons[2].Render(385, 505,renderer);
+                        //     buttons[3].Render(450, 605,renderer);
+                        //     SDL_RenderPresent(renderer);
+                        // }
+                        break;
+                    }
+                }
+            }
+            window.clear();
+            window.renderBackground(mainBackground);
+            buttons[0].Render(435, 305,window.render());
+            buttons[1].Render(385, 405,window.render());
+            buttons[2].Render(385, 505,window.render());
+            buttons[3].Render(450, 605,window.render());
+            gameTitle.display(125, 150, window.render());
+            window.display();
+
+            float frameTicks = SDL_GetTicks64() - startTick;
+            if(frameTicks < 1000/ window.getRefreshRate()) {
+                SDL_Delay(1000/window.getRefreshRate() - frameTicks);
+            }
+        }
+
         if (_gameOver){
+            float startTick = SDL_GetTicks64();
+            float newTime = utils::hireTimeInSeconds();
+            float frameTime = newTime - currentTime;
+            currentTime = newTime;
+            accumulator += frameTime;
+
             if (oneTimeAction == true){
                 gameOverBg = window.loadTexture("screenshot.png");
                 gameOverBackGround = Enity(Coordination(0,0),gameOverBg);
-
-                gameOver_text = Text(window.render(),"res/dev/Blockletter.otf",100,"Game Over", {51,0,0});
-            
-                
                 _Best_score = "Best score: " + to_string(GetBestScore());
                 Best_score = Text(window.render(),"res/dev/Blockletter.otf", 50, _Best_score, {82,82,82});
                 _curr_score =  "Score: " + to_string(_score);
@@ -204,16 +363,6 @@ int main(int argc, char *args[])
                 oneTimeAction = false;
 
             }
-
-            float startTick = SDL_GetTicks64();
-
-            float newTime = utils::hireTimeInSeconds();
-            float frameTime = newTime - currentTime;
-
-            currentTime = newTime;
-            accumulator += frameTime;
-
-
 
             while(accumulator >= timeStep) {
                 while(SDL_PollEvent(&event)) {
@@ -247,10 +396,7 @@ int main(int argc, char *args[])
                 accumulator -= timeStep;
             }
 
-            
-            
             float frameTicks = SDL_GetTicks64() - startTick;
-
             if(frameTicks < 1000/ window.getRefreshRate()) {
                 SDL_Delay(1000/window.getRefreshRate() - frameTicks);
             }
@@ -267,6 +413,7 @@ int main(int argc, char *args[])
 
             continue;
         }
+
         float startTick = SDL_GetTicks64();
 
         float newTime = utils::hireTimeInSeconds();
