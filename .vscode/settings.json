@@ -64,7 +64,8 @@
         "sstream": "cpp",
         "thread": "cpp",
         "cinttypes": "cpp",
-        "stop_token": "cpp"
+        "stop_token": "cpp",
+        "iomanip": "cpp"
     },
     "C_Cpp.default.compilerPath": "D:\\Program Files\\MinGW\\bin\\gcc.exe"
 }

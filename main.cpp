@@ -12,14 +12,16 @@
 #include "Motorbike.h"
 #include "Enity.h"
 #include "Road.h"
-#include<stdio.h>
+#include <stdio.h>
 #include <fstream>
 #include <ctime>
 #include <sstream>
 #include <cstring>
 #include <iostream>
+#include <chrono>
+#include <iomanip>
+#include <algorithm>
 #include "Button.h"
-#include "Instruction.h"
 #include "HighScores.h"
 using namespace std;
 
@@ -55,22 +57,26 @@ bool saveScreenshot(SDL_Renderer* renderer, const char* filename) {
 
 
 void saveScore(int score) {
-    std::ofstream file("score_data.txt", std::ios::app);  // Note the 'std::ios::app' mode
+    auto now = std::chrono::system_clock::now();
+    std::time_t now_c = std::chrono::system_clock::to_time_t(now);
+    std::tm* local_time = std::localtime(&now_c);
 
+    // Use a string stream to format the date
+    std::ostringstream oss;
+    oss << std::setfill('0') << std::setw(2) << local_time->tm_mday << "/"
+        << std::setw(2) << (local_time->tm_mon + 1) << "/"
+        << std::setw(2) << (local_time->tm_year % 100);
+
+    // Convert the string stream to a string
+    std::string formattedDate = oss.str();
+
+    std::ofstream file("score_data.txt", std::ios::app); 
     if (!file.is_open()) {
         std::cerr << "Failed to open the file for writing." << std::endl;
         return;
     }
 
-    // Get the current date and time
-    std::time_t now = std::time(nullptr);
-    char* dt = std::ctime(&now);
-    
-    // Remove newline that ctime adds
-    dt[strlen(dt) - 1] = '\0';
-
-    file << score << " " << dt << std::endl;
-
+    file<< formattedDate <<" " <<"Player1"<<" "<< score<<std::endl;
     file.close();
 }
 
@@ -83,11 +89,12 @@ int GetBestScore() {
     }
 
     int bestScore = 0;   // Assuming scores are non-negative. Initialize with a value lower than possible scores if not.
+    string dt,name;
     int currentScore;
     std::string temp;
     while (getline(file, temp)) {
         std::istringstream iss(temp);
-        iss >> currentScore;
+        iss >>dt>>name>> currentScore;
         if (currentScore > bestScore) {
             bestScore = currentScore;
         }
@@ -167,10 +174,7 @@ int main(int argc, char *args[])
     buttons.emplace_back(378, 500, 200, 50, "INSTRUCTION", window.render());
     buttons.emplace_back(378, 600, 200, 50, "EXIT", window.render());
 
-    Instruction instructionWindow("res/dev/Blockletter.otf");
-    HighScores highscoresWindow("res/dev/Blockletter.otf");
-
-    vector<tuple<string, string, int> > highScores = highscoresWindow.readHighScoresFromFile("score_data.txt");
+    HighScores highscoresWindow;
 
     int _score = 0;
     std::string _main_score = "";
@@ -236,7 +240,9 @@ int main(int argc, char *args[])
                             // Render instruction window
                             window.clear();
                             window.renderBackground(mainBackground);
-                            instructionWindow.Render(window.render(), 960, 960);
+                            SDL_SetRenderDrawColor(window.render(), 236, 235, 243, 255);
+                            SDL_Rect windowRect = { 50, 100, 860, 760}; 
+                            SDL_RenderFillRect(window.render(), &windowRect);
                             instructionTitle.display(300, 120, window.render());
                             instruction.display(80, 270, window.render());
                             window.display();
@@ -260,7 +266,9 @@ int main(int argc, char *args[])
                             // Render high scores window
                             window.clear();
                             window.renderBackground(mainBackground);
-                            highscoresWindow.Render(window.render(), 960, 960);
+                            SDL_SetRenderDrawColor(window.render(), 236, 235, 243, 255);
+                            SDL_Rect windowRect = { 50, 100, 860, 760}; 
+                            SDL_RenderFillRect(window.render(), &windowRect);
                             highscoresTitle.display(310, 120, window.render());
 
                             Date.display(130, 250, window.render());
@@ -268,7 +276,9 @@ int main(int argc, char *args[])
                             Score.display(730, 250, window.render());
 
                             // Render the high scores
-                            int highscore_height = 300;
+                            int text_pos_y = 320;
+                            vector<tuple<string, string, int> > highScores = highscoresWindow.readHighScoresFromFile("score_data.txt");
+                            std::reverse(highScores.begin(),highScores.end());
                             for (const auto& score : highScores)
                             {
                                 std::string date = std::get<0>(score);
@@ -276,15 +286,16 @@ int main(int argc, char *args[])
                                 int scoreValue = std::get<2>(score);
                                 std::string score_str = to_string(scoreValue);
 
-                                Text date_data(window.render(), "res/dev/Blockletter.otf", 40, date.c_str(), { 0, 0, 0, 255});
-                                Text player_data(window.render(), "res/dev/Blockletter.otf", 40, player.c_str(), { 0, 0, 0, 255});
-                                Text score_data(window.render(), "res/dev/Blockletter.otf", 40, score_str.c_str(), { 0, 0, 0, 255});
+                                Text date_data(window.render(), "res/dev/Blockletter.otf", 40, date.c_str(), {82, 82, 82});
+                                Text player_data(window.render(), "res/dev/Blockletter.otf", 40, player.c_str(), {82, 82, 82});
+                                Text score_data(window.render(), "res/dev/Blockletter.otf", 40, score_str.c_str(), {82, 82, 82});
 
-                                date_data.display(100, highscore_height, window.render());
-                                player_data.display(400, highscore_height, window.render());
-                                score_data.display(700, highscore_height, window.render());
+                                date_data.display(110, text_pos_y, window.render());
+                                player_data.display(415, text_pos_y, window.render());
+                                score_data.display(755, text_pos_y, window.render());
 
-                                highscore_height += 50;
+                                text_pos_y += 50;
+                                if(text_pos_y>=770) break;
                             }
                             SDL_RenderPresent(window.render());
 
@@ -333,9 +344,9 @@ int main(int argc, char *args[])
                 gameOverBg = window.loadTexture("screenshot.png");
                 gameOverBackGround = Enity(Coordination(0,0),gameOverBg);
                 _Best_score = "Best score: " + to_string(GetBestScore());
-                Best_score = Text(window.render(),"res/dev/Blockletter.otf", 50, _Best_score, {82,82,82});
+                Best_score = Text(window.render(),"res/dev/Blockletter.otf", 50, _Best_score, {231,76,60});
                 _curr_score =  "Score: " + to_string(_score);
-                curr_score = Text(window.render(),"res/dev/Blockletter.otf", 50, _curr_score, {82,82,82});
+                curr_score = Text(window.render(),"res/dev/Blockletter.otf", 50, _curr_score, {231,76,60});
                 oneTimeAction = false;
 
             }
@@ -371,7 +382,7 @@ int main(int argc, char *args[])
                 
                 accumulator -= timeStep;
             }
-            
+
             float frameTicks = SDL_GetTicks64() - startTick;
             if(frameTicks < 1000/ window.getRefreshRate()) {
                 SDL_Delay(1000/window.getRefreshRate() - frameTicks);
@@ -508,7 +519,6 @@ int main(int argc, char *args[])
                             {
                                 (Roads[i].get_list_of_lane() + j)->vehicleThrough(x);
                                 x->set_through();
-
                             }
                             if (curr_pos.x >= 370 && curr_pos.x <= 590 && curr_pos.y >= 370 && curr_pos.y <= 590 && p_lane % 3 == 0)
                             {
@@ -518,8 +528,7 @@ int main(int argc, char *args[])
                                 {
                                     Coordination vehicle_ahead = (x - 1)->get_pos();
                                     float dist = sqrt(pow(abs(vehicle_ahead.x - curr_pos.x), 2) + pow(abs(vehicle_ahead.y - curr_pos.y), 2));
-                                    if (dist >= (x - 1)->get_length() + 5)
-                                        x->turnLeft();
+                                    if (dist >= (x - 1)->get_length() + 5) x->turnLeft();
                                 }
                             }
                             else if (curr_pos.x >= 370 && curr_pos.x <= 590 && curr_pos.y >= 370 && curr_pos.y <= 590 && p_lane % 3 == 2)
@@ -531,8 +540,7 @@ int main(int argc, char *args[])
                                 {
                                     Coordination vehicle_ahead = (x - 1)->get_pos();
                                     float dist = sqrt(pow(abs(vehicle_ahead.x - curr_pos.x), 2) + pow(abs(vehicle_ahead.y - curr_pos.y), 2));
-                                    if (dist >= (x - 1)->get_length() + 5)
-                                        x->turnRight();
+                                    if (dist >= (x - 1)->get_length() + 5) x->turnRight();
                                 }
                             }
                             else
@@ -556,7 +564,7 @@ int main(int argc, char *args[])
                                             }
                                         }
                                     }
-                                    else if (x->get_have_add() == false && x == (Roads[i].get_list_of_lane() + j)->get_list_vehicles()->begin()){
+                                    else if (x->get_have_add() == false && curr_pos.x>369.8 && curr_pos.y <372){
                                                 (Roads[i].get_list_of_lane() + j)->addLength(*x);
                                                 x->set_have_add();
                                     }
@@ -580,7 +588,7 @@ int main(int argc, char *args[])
                                             }
                                         }
                                     }
-                                    else if (x->get_have_add() == false && x == (Roads[i].get_list_of_lane() + j)->get_list_vehicles()->begin()){
+                                    else if (x->get_have_add() == false && curr_pos.x>369.8 && curr_pos.y <372){
                                                 (Roads[i].get_list_of_lane() + j)->addLength(*x);
                                                 x->set_have_add();
                                     }
@@ -605,7 +613,7 @@ int main(int argc, char *args[])
                                             }
                                         }
                                     }
-                                    else if (x->get_have_add() == false && x == (Roads[i].get_list_of_lane() + j)->get_list_vehicles()->begin()){
+                                    else if (x->get_have_add() == false && curr_pos.x>369.8 && curr_pos.y <372){
                                                 (Roads[i].get_list_of_lane() + j)->addLength(*x);
                                                 x->set_have_add();
                                     }
@@ -630,7 +638,7 @@ int main(int argc, char *args[])
                                             }
                                         }
                                     }
-                                    else if (x->get_have_add() == false && x == (Roads[i].get_list_of_lane() + j)->get_list_vehicles()->begin()){
+                                    else if (x->get_have_add() == false && curr_pos.x>369.8 && curr_pos.y <372){
                                                 (Roads[i].get_list_of_lane() + j)->addLength(*x);
                                                 x->set_have_add();
                                     }
@@ -644,7 +652,8 @@ int main(int argc, char *args[])
         }
 
         while (accumulator >= timeStep)
-        {
+        {   
+            while(accumulator>=timeStep) accumulator -= timeStep;
             while (SDL_PollEvent(&event))
             {
                 if (event.type == SDL_QUIT)
@@ -654,19 +663,19 @@ int main(int argc, char *args[])
             {
                 for (short int j = 0; j < 3; j++)
                 {
-                    if ((Roads[i].get_list_of_lane() + j)->get_curr_length() >= (Roads[i].get_list_of_lane() + j)->get_max_length())
+                    if ((Roads[i].get_list_of_lane() + j)->get_curr_length() > (Roads[i].get_list_of_lane() + j)->get_max_length())
                     {
-                      FILE *f = fopen("screenshot.png", "r");
+                        FILE *f = fopen("screenshot.png", "r");
                         if (f) {
-                            cout << 1 << endl;
                             remove("screenshot.png");
                             fclose(f);
                         }
                         saveScreenshot(window.render(), "screenshot.png");
                         saveScore(_score);
                         cout <<"Road " << i << " Lane " << j << " full" << endl;
-                        cout << "Length of full lane: " << (Roads[i].get_list_of_lane() + j)->get_curr_length() << endl;
-                        _gameOver = true;  
+                        cout << "Length of this lane: " << (Roads[i].get_list_of_lane() + j)->get_curr_length() << endl;
+                        _gameOver = true;
+                        break;  
                     }
                     std::vector<Vehicle> *vehicles_list = (Roads[i].get_list_of_lane() + j)->get_list_vehicles();
                     if (vehicles_list->size() != 0)
@@ -685,7 +694,6 @@ int main(int argc, char *args[])
                     }
                 }
             }
-            accumulator -= timeStep;
         }
 
         if (spawnTime >= spawn_speed * timeStep)
