@@ -1,0 +1,31 @@
+#ifndef MOTORBIKE_H
+#define MOTORBIKE_H
+
+#include"Vehicle.h"
+
+class Motorbike: public Vehicle {
+    public:
+    // Set the default values for the Motorbike class
+    Motorbike() {
+        Enity::set_frame(20,25);
+        Vehicle::set_speed(1.1);
+        Vehicle::set_length(25);
+    };
+    // Set the neccessary values for the Motorbike class
+    Motorbike(float x, float y,short int road, short int p_lane, SDL_Texture* p_tex) {
+        Enity::set_pos_x(x);
+        Enity::set_pos_y(y);
+        Enity::set_tex(p_tex);
+        Enity::set_frame(20,25);
+        Vehicle::set_speed(1.1);
+        Vehicle::set_length(25);
+        Vehicle::set_angle(road,p_lane);
+        Vehicle::set_direction(road);
+        Vehicle::set_capacity(2);
+
+        through = false;
+        have_add = false;
+    }
+};
+
+#endif

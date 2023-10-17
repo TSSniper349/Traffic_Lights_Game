@@ -1,0 +1,27 @@
+- ADD:
+    + The Entity Class: represents entitites in the game, derive from the Coordination Class.
+    + The HighScores Class: represent a class that is used to read high scores data from file
+    + The RenderWindow Class: represents a window used for rendering objects.
+    + The Button Class: represents buttons on the main menu screen.
+    + The Text Class: represents text to be rendered on the screen using SDL
+    + The Countdown Timer Class: represents the timer for the traffic lights. 
+
+- CHANGE:
+    + The Car, Bus, Motorbike Class derive from the Vehicle Class.
+    + The Vehicle Class derives from the Entity Class.
+    + The TrafficLight Class derive from the Entity Class.
+    + The Lane Class derives from the Coordination Class.
+    + Coordnation Struct becomes the Coordnation Class which is an abstract class.
+    + The player only loses the game if the queue of vehicles touches the edge of the map.
+    + No more SAVE GAME window, replaced by the HIGH SCORES window.
+
+- DELETE:
+    + The NormalVehicle Class
+    + The SpecialVehicle Class
+    + The PoliceCar Class
+    + The Ambulance Class
+    + The FireTruck Class
+
+
+
+
