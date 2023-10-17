@@ -10,7 +10,7 @@
 #include <utility>
 #include <vector>
 #include <string>
-//#include <tuple>
+#include <tuple>
 
 using namespace std;
 
@@ -21,7 +21,7 @@ class HighScores{
         HighScores(const std::string &font_path);
         void Render(SDL_Renderer* renderer, int width, int height) const;
         void SetColor(SDL_Color color);
-        //vector<tuple<string, string, int> > readHighScoresFromFile(const string& filename);
+        vector<tuple<string, string, int> > readHighScoresFromFile(const string& filename);
 
 };
 #endif

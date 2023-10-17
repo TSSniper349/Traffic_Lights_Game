@@ -11,10 +11,10 @@ Instruction::Instruction(const std::string &font_path) {
     m_color.a = 150;
 } 
 
-void Instruction::Render(SDL_Renderer* renderer, int width, int height) const {
+void Instruction::Render(SDL_Renderer* renderer, int width, int height) {
     // Render instruction window background
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_Rect windowRect = { 100, 100, width - 200, height - 200 }; 
+    SDL_SetRenderDrawColor(renderer, 236, 235, 243, 255);
+    SDL_Rect windowRect = { 50, 100, width - 100, height - 200 }; 
     SDL_RenderFillRect(renderer, &windowRect);
 }
 

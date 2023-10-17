@@ -13,8 +13,8 @@ HighScores::HighScores(const std::string &font_path) {
 
 void HighScores::Render(SDL_Renderer* renderer, int width, int height) const {
     // Render high scores window background
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_Rect windowRect = { 100, 100, width - 200, height - 200 }; 
+    SDL_SetRenderDrawColor(renderer, 236, 235, 243, 255);
+    SDL_Rect windowRect = { 50, 100, width - 100, height - 200 }; 
     SDL_RenderFillRect(renderer, &windowRect);
 }
 
@@ -22,26 +22,26 @@ void HighScores::SetColor(SDL_Color color) {
     m_color = color;
 }
 
-// vector<tuple<string, string, int> > HighScores::readHighScoresFromFile(const string& filename)
-// {
-//     vector<tuple<string, string, int> > highScores;
+vector<tuple<string, string, int> > HighScores::readHighScoresFromFile(const string& filename)
+{
+    vector<tuple<string, string, int> > highScores;
 
-//     ifstream file(filename);
-//     if (file.is_open())
-//     {
-//         string line;
-//         while (getline(file, line))
-//         {
-//             istringstream iss(line);
-//             string date, name;
-//             int score;
-//             if (iss >> date >> name >> score)
-//             {
-//                 highScores.emplace_back(date,name,score);
-//             }
-//         }
-//         file.close();
-//     }
+    ifstream file(filename);
+    if (file.is_open())
+    {
+        string line;
+        while (getline(file, line))
+        {
+            istringstream iss(line);
+            string date, name;
+            int score;
+            if (iss >> date >> name >> score)
+            {
+                highScores.emplace_back(date,name,score);
+            }
+        }
+        file.close();
+    }
 
-//     return highScores;
-// }
+    return highScores;
+}

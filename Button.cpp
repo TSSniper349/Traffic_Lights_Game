@@ -3,12 +3,12 @@
 Button::Button(int x, int y, int width, int height, const std::string& text, SDL_Renderer* renderer)
         : m_x(x), m_y(y), m_width(width), m_height(height), m_text(text){
 
-            button_text = Text(renderer, "res/dev/Blockletter.otf", 30, text,{ 0, 255, 255, 255 });
+            button_text = Text(renderer, "res/dev/Blockletter.otf", 30, text,{12, 18, 12});
         }
 
 void Button::Render(short int x, short int y, SDL_Renderer* renderer){
     // Render button background
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, 236, 235, 243, 255);
     SDL_Rect buttonRect = { m_x, m_y, m_width, m_height };
     SDL_RenderFillRect(renderer, &buttonRect);
 

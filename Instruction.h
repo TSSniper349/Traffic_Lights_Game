@@ -10,7 +10,7 @@ class Instruction {
         SDL_Color m_color;
     public:
         Instruction(const std::string &font_path);
-        void Render(SDL_Renderer* renderer, int width, int height) const;
+        void Render(SDL_Renderer* renderer, int width, int height);
         void SetColor(SDL_Color color);
 };
 

@@ -152,25 +152,25 @@ int main(int argc, char *args[])
                      Road("Top"),
                      Road("Bottom")};
 
-    Text gameTitle(window.render(), "res/dev/Blockletter.otf", 72, "TRAFFIC LIGHTS GAME", { 0, 0, 0, 0});
-    Text highscoresTitle(window.render(), "res/dev/Blockletter.otf", 72, "HIGH SCORES", { 0, 0, 255, 0});
-    Text Date(window.render(), "res/dev/Blockletter.otf", 40, "Date", { 0, 0, 0, 255});
-    Text Player(window.render(), "res/dev/Blockletter.otf", 40, "Player", { 0, 0, 0, 255});
-    Text Score(window.render(), "res/dev/Blockletter.otf", 40, "Score", { 0, 0, 0, 255});
-    Text instructionTitle(window.render(), "res/dev/Blockletter.otf", 72, "INSTRUCTION", { 0, 0, 255, 0});
-    string instructionText = "Objective:\n - To control the traffic lights and manage the flow of traffic to avoid accidents and ensure smooth traffic movement.\n\nControl:\n - Use the W, A, S, D key to control the traffic light at\nthe top, left, bottom, right lane respectively.\n\nScoring:\n - Motorbikes give 1 pt, cars give 1-4 pts based on\nthe vehicle's color and buses give 5-7 pts.\n\n Conditions:\n - The player loses the game if a vehicle touches the edge of the window.";
-    Text instruction(window.render(), "res/dev/Blockletter.otf", 32, instructionText, { 0, 0, 255, 0}, "Instruction");
+    Text gameTitle(window.render(), "res/dev/Blockletter.otf", 72, "TRAFFIC LIGHTS GAME", {68, 34, 32});
+    Text highscoresTitle(window.render(), "res/dev/Blockletter.otf", 72, "HIGH SCORES", {68, 34, 32});
+    Text Date(window.render(), "res/dev/Blockletter.otf", 40, "Date", { 50, 50, 50});
+    Text Player(window.render(), "res/dev/Blockletter.otf", 40, "Player", { 50, 50, 50});
+    Text Score(window.render(), "res/dev/Blockletter.otf", 40, "Score", { 50, 50, 50});
+    Text instructionTitle(window.render(), "res/dev/Blockletter.otf", 72, "INSTRUCTION", {68, 34, 32});
+    string instructionText = "Objective:\n - To control the traffic lights and manage the flow of traffic.\nControl:\n - Use the W, A, S, D key to control the traffic light at the\n top, left, bottom, right lane respectively.\n - Only 1 traffic light is allowed to turn on at a time.\nScoring:\n - Motorbikes give 1 pt, cars give 1-4 pts and buses give 5-7 pts\n based on the vehicle's color.\nConditions:\n - The player loses the game if a lane touches the edge of the window.";
+    Text instruction(window.render(), "res/dev/Blockletter.otf", 32, instructionText, { 50, 50, 50}, "Instruction");
 
     std::vector<Button> buttons;
-    buttons.emplace_back(380, 300, 200, 50, "START", window.render());
-    buttons.emplace_back(380, 400, 200, 50, "HIGH SCORES", window.render());
-    buttons.emplace_back(380, 500, 200, 50, "INSTRUCTION", window.render());
-    buttons.emplace_back(380, 600, 200, 50, "EXIT", window.render());
+    buttons.emplace_back(378, 300, 200, 50, "START", window.render());
+    buttons.emplace_back(378, 400, 200, 50, "HIGH SCORES", window.render());
+    buttons.emplace_back(378, 500, 200, 50, "INSTRUCTION", window.render());
+    buttons.emplace_back(378, 600, 200, 50, "EXIT", window.render());
 
     Instruction instructionWindow("res/dev/Blockletter.otf");
     HighScores highscoresWindow("res/dev/Blockletter.otf");
 
-    //vector<tuple<string, string, int> > highScores = highscoresWindow.readHighScoresFromFile("score_data.txt");
+    vector<tuple<string, string, int> > highScores = highscoresWindow.readHighScoresFromFile("score_data.txt");
 
     int _score = 0;
     std::string _main_score = "";
@@ -235,14 +235,10 @@ int main(int argc, char *args[])
                         else if (button.GetText() == "INSTRUCTION") {
                             // Render instruction window
                             window.clear();
-                            //instructionWindow.Render(window.render(), 960, 960);
                             window.renderBackground(mainBackground);
-                            instructionTitle.display(250, 150, window.render());
-
-                            // Render the white box
-                            SDL_Rect boxRect = { 80, 250, 800, 800 };
-                            SDL_RenderFillRect(window.render(), &boxRect);
-                            //instruction.display(100, 250, window.render());
+                            instructionWindow.Render(window.render(), 960, 960);
+                            instructionTitle.display(300, 120, window.render());
+                            instruction.display(80, 270, window.render());
                             window.display();
 
                             // Wait for a key press to exit the instruction window
@@ -251,6 +247,7 @@ int main(int argc, char *args[])
                                 while (SDL_PollEvent(&event) != 0 && event.key.keysym.sym == SDLK_ESCAPE) {
                                     if (event.type == SDL_QUIT) {
                                         gameRunning = false;
+                                        main_menu = false;
                                         instructionWindowOpen = false;
                                     }
                                     else if (event.type == SDL_KEYDOWN) {
@@ -259,85 +256,64 @@ int main(int argc, char *args[])
                                 }
                             }
                         }
-                        // else if (button.GetText() == "HIGH SCORES") {
-                        //     // Render high scores window
-                        //     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-                        //     SDL_RenderClear(renderer);
-                        //     highscoresWindow.Render(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
-                        //     SDL_RenderPresent(renderer);
+                        else if (button.GetText() == "HIGH SCORES") {
+                            // Render high scores window
+                            window.clear();
+                            window.renderBackground(mainBackground);
+                            highscoresWindow.Render(window.render(), 960, 960);
+                            highscoresTitle.display(310, 120, window.render());
 
-                        //     // Render background image
-                        //     SDL_RenderClear(renderer);
-                        //     renderTexture(Background, renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                            Date.display(130, 250, window.render());
+                            Player.display(430, 250, window.render());
+                            Score.display(730, 250, window.render());
 
-                        //     // Render the high scores title text
-                        //     highscoresTitle.display(250, 150, renderer);
+                            // Render the high scores
+                            int highscore_height = 300;
+                            for (const auto& score : highScores)
+                            {
+                                std::string date = std::get<0>(score);
+                                std::string player = std::get<1>(score);
+                                int scoreValue = std::get<2>(score);
+                                std::string score_str = to_string(scoreValue);
 
-                        //     // Render the white box
-                        //     SDL_Rect boxRect = { 80, 250, 800, 800 };
-                        //     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
-                        //     SDL_RenderFillRect(renderer, &boxRect);
+                                Text date_data(window.render(), "res/dev/Blockletter.otf", 40, date.c_str(), { 0, 0, 0, 255});
+                                Text player_data(window.render(), "res/dev/Blockletter.otf", 40, player.c_str(), { 0, 0, 0, 255});
+                                Text score_data(window.render(), "res/dev/Blockletter.otf", 40, score_str.c_str(), { 0, 0, 0, 255});
 
-                        //     Date.display(100, 250, renderer);
-                        //     Player.display(400, 250, renderer);
-                        //     Score.display(700, 250, renderer);
+                                date_data.display(100, highscore_height, window.render());
+                                player_data.display(400, highscore_height, window.render());
+                                score_data.display(700, highscore_height, window.render());
 
-                        //     // Render the high scores
-                        //     int highscore_height = 300;
-                        //     for (const auto& score : highScores)
-                        //     {
-                        //         std::string date = std::get<0>(score);
-                        //         std::string player = std::get<1>(score);
-                        //         int scoreValue = std::get<2>(score);
-                        //         std::string score_str = to_string(scoreValue);
+                                highscore_height += 50;
+                            }
+                            SDL_RenderPresent(window.render());
 
-                        //         Text date_data(renderer, "/Resource/Aller/Aller_Rg.ttf", 40, date.c_str(), { 0, 0, 0, 255}, "Normal");
-                        //         Text player_data(renderer, "/Resource/Aller/Aller_Rg.ttf", 40, player.c_str(), { 0, 0, 0, 255}, "Normal");
-                        //         Text score_data(renderer, "/Resource/Aller/Aller_Rg.ttf", 40, score_str.c_str(), { 0, 0, 0, 255}, "Normal");
-
-                        //         date_data.display(100, highscore_height, renderer);
-                        //         player_data.display(400, highscore_height, renderer);
-                        //         score_data.display(700, highscore_height, renderer);
-
-                        //         highscore_height += 50;
-                        //     }
-                        //     SDL_RenderPresent(renderer);
-
-                        //     // Wait for a key press to exit the highscore window
-                        //     bool highscoresWindowOpen = true;
-                        //     while (highscoresWindowOpen) {
-                        //         while (SDL_PollEvent(&e) != 0 && e.key.keysym.sym == SDLK_ESCAPE) {
-                        //             if (e.type == SDL_QUIT) {
-                        //                 quit = true;
-                        //                 highscoresWindowOpen = false;
-                        //             }
-                        //             else if (e.type == SDL_KEYDOWN) {
-                        //                 highscoresWindowOpen = false;
-                        //             }
-                        //         }
-                        //     }
-
-                        //     // Render main menu again
-                        //     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-                        //     SDL_RenderClear(renderer);
-                        //     // Render buttons
-                        //     buttons[0].Render(435, 305,renderer);
-                        //     buttons[1].Render(385, 405,renderer);
-                        //     buttons[2].Render(385, 505,renderer);
-                        //     buttons[3].Render(450, 605,renderer);
-                        //     SDL_RenderPresent(renderer);
-                        // }
+                            // Wait for a key press to exit the highscore window
+                            bool highscoresWindowOpen = true;
+                            while (highscoresWindowOpen) {
+                                while (SDL_PollEvent(&event) != 0 && event.key.keysym.sym == SDLK_ESCAPE) {
+                                    if (event.type == SDL_QUIT) {
+                                        main_menu = false;
+                                        gameRunning = false;
+                                        highscoresWindowOpen = false;
+                                    }
+                                    else if (event.type == SDL_KEYDOWN) {
+                                        highscoresWindowOpen = false;
+                                    }
+                                }
+                            }
+                        }
                         break;
                     }
                 }
             }
             window.clear();
             window.renderBackground(mainBackground);
-            buttons[0].Render(435, 305,window.render());
-            buttons[1].Render(385, 405,window.render());
-            buttons[2].Render(385, 505,window.render());
-            buttons[3].Render(450, 605,window.render());
-            gameTitle.display(125, 150, window.render());
+            buttons[0].Render(445, 305,window.render());
+            buttons[1].Render(410, 405,window.render());
+            buttons[2].Render(410, 505,window.render());
+            buttons[3].Render(455, 605,window.render());
+            gameTitle.display(180, 150, window.render());
             window.display();
 
             float frameTicks = SDL_GetTicks64() - startTick;
@@ -395,7 +371,7 @@ int main(int argc, char *args[])
                 
                 accumulator -= timeStep;
             }
-
+            
             float frameTicks = SDL_GetTicks64() - startTick;
             if(frameTicks < 1000/ window.getRefreshRate()) {
                 SDL_Delay(1000/window.getRefreshRate() - frameTicks);
