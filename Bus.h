@@ -4,8 +4,9 @@
 class Bus: public Vehicle {
     public:
     Bus() {};
-    Bus(Coordination p_pos,short int road, short int p_lane, short int capacity, SDL_Texture* p_tex) {
-        Enity::set_pos(p_pos);
+    Bus(float x, float y,short int road, short int p_lane, short int capacity, SDL_Texture* p_tex) {
+        Enity::set_pos_x(x);
+        Enity::set_pos_y(y);
         Enity::set_tex(p_tex);
         Enity::set_frame(20,75);
         Vehicle::set_speed(0.9);

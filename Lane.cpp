@@ -1,25 +1,14 @@
 #include"Lane.h"
 #include<iostream>
 
-Lane::Lane(): Lane(Coordination(0,0)) {}
+Lane::Lane(): Lane(0,0) {}
 
-Lane::Lane(Coordination p_pos) {
+Lane::Lane(float x, float y) {
     list_vehicles = new std::vector<Vehicle>;
     max_length = 375;
-    pos = p_pos;
+    pos_x = x;
+    pos_y = y;
     curr_length = 0;
-}
-
-float Lane::get_max_length() {
-    return max_length;
-}
-
-float Lane::get_curr_length() {
-    return curr_length;
-}
-
-Coordination Lane::get_pos() {
-    return pos;
 }
 
 std::vector<Vehicle>* Lane::get_list_vehicles() {

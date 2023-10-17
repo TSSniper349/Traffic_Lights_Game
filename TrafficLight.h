@@ -26,7 +26,6 @@ class TrafficLight: public Enity{
         void set_timer(int time);
         // static SDL_Texture *loadFont(const string &message_text);
         // void set_text(const string &message);
-        Coordination get_pos();
     
     private:
         string _curr_color;

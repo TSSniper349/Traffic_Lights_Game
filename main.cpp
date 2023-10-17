@@ -150,8 +150,8 @@ int main(int argc, char *args[])
     TrafficLight *trafficlightBottom = new TrafficLight(window.render(), 340, 590, "res/gfx/red.png", 6);
     TrafficLight *trafficlightRight = new TrafficLight(window.render(), 590, 590, "res/gfx/red.png", 6);
 
-    Enity mainBackground(Coordination(0, 0), mainBg);
-    Enity restartButton(Coordination(420,565), restart_img);
+    Enity mainBackground(0,0, mainBg);
+    Enity restartButton(420,565, restart_img);
     std::vector<Vehicle> *vehicles = new std::vector<Vehicle>;
 
     Road Roads[4] = {Road("Left"),
@@ -342,7 +342,7 @@ int main(int argc, char *args[])
 
             if (oneTimeAction == true){
                 gameOverBg = window.loadTexture("screenshot.png");
-                gameOverBackGround = Enity(Coordination(0,0),gameOverBg);
+                gameOverBackGround = Enity(0,0,gameOverBg);
                 _Best_score = "Best score: " + to_string(GetBestScore());
                 Best_score = Text(window.render(),"res/dev/Blockletter.otf", 50, _Best_score, {231,76,60});
                 _curr_score =  "Score: " + to_string(_score);
@@ -358,8 +358,8 @@ int main(int argc, char *args[])
                     int mouseX, mouseY;
                     SDL_GetMouseState(&mouseX, &mouseY);
 
-                    if(mouseX >= restartButton.get_pos().x && mouseX <= (restartButton.get_pos().x + restartButton.get_frame().w) &&
-                    mouseY >= restartButton.get_pos().y && mouseY <= (restartButton.get_pos().y + restartButton.get_frame().h)) {
+                    if(mouseX >= restartButton.get_pos_x() && mouseX <= (restartButton.get_pos_x() + restartButton.get_frame().w) &&
+                    mouseY >= restartButton.get_pos_y() && mouseY <= (restartButton.get_pos_y() + restartButton.get_frame().h)) {
                         // The restart button was clicked
                         // gameRunning = false;
                         for (short int i = 0; i < 4; i++){
@@ -507,7 +507,8 @@ int main(int argc, char *args[])
                         std::vector<Vehicle>::iterator x;
                         for (x = (Roads[i].get_list_of_lane() + j)->get_list_vehicles()->begin(); x < (Roads[i].get_list_of_lane() + j)->get_list_vehicles()->end(); x++)
                         {
-                            Coordination curr_pos = x->get_pos();
+                            float curr_pos_x = x->get_pos_x();
+                            float curr_pos_y = x->get_pos_y();
                             short int p_lane = x->get_lane();
                             float length = x->get_length();
                             short int dir = x->get_direction();
@@ -515,31 +516,33 @@ int main(int argc, char *args[])
                                 //cout << "Length of first vehicle in roads 0 lane 0: " << (Roads[0].get_list_of_lane() + 0)->get_curr_length() << endl;
                             }
                             string curr_col = Roads[i].get_trafficlight()->get_curr_color();
-                            if (curr_pos.x >= 370 && curr_pos.x <= 590 && curr_pos.y >= 370 && curr_pos.y <= 590 && x->get_through() == false)
+                            if (curr_pos_x >= 370 && curr_pos_x <= 590 && curr_pos_y >= 370 && curr_pos_y <= 590 && x->get_through() == false)
                             {
                                 (Roads[i].get_list_of_lane() + j)->vehicleThrough(x);
                                 x->set_through();
                             }
-                            if (curr_pos.x >= 370 && curr_pos.x <= 590 && curr_pos.y >= 370 && curr_pos.y <= 590 && p_lane % 3 == 0)
+                            if (curr_pos_x >= 370 && curr_pos_x <= 590 && curr_pos_y >= 370 && curr_pos_y <= 590 && p_lane % 3 == 0)
                             {
                                 if (x == (Roads[i].get_list_of_lane() + j)->get_list_vehicles()->begin())
                                     x->turnLeft();
                                 else
                                 {
-                                    Coordination vehicle_ahead = (x - 1)->get_pos();
-                                    float dist = sqrt(pow(abs(vehicle_ahead.x - curr_pos.x), 2) + pow(abs(vehicle_ahead.y - curr_pos.y), 2));
+                                    float vehicle_ahead_x = (x - 1)->get_pos_x();
+                                    float vehicle_ahead_y = (x - 1)->get_pos_y();
+                                    float dist = sqrt(pow(abs(vehicle_ahead_x - curr_pos_x), 2) + pow(abs(vehicle_ahead_y - curr_pos_y), 2));
                                     if (dist >= (x - 1)->get_length() + 5) x->turnLeft();
                                 }
                             }
-                            else if (curr_pos.x >= 370 && curr_pos.x <= 590 && curr_pos.y >= 370 && curr_pos.y <= 590 && p_lane % 3 == 2)
+                            else if (curr_pos_x >= 370 && curr_pos_x <= 590 && curr_pos_y >= 370 && curr_pos_y <= 590 && p_lane % 3 == 2)
                             {
                                 (Roads[i].get_list_of_lane() + j)->vehicleThrough(x);
                                 if (x == (Roads[i].get_list_of_lane() + j)->get_list_vehicles()->begin())
                                     x->turnRight();
                                 else
                                 {
-                                    Coordination vehicle_ahead = (x - 1)->get_pos();
-                                    float dist = sqrt(pow(abs(vehicle_ahead.x - curr_pos.x), 2) + pow(abs(vehicle_ahead.y - curr_pos.y), 2));
+                                    float vehicle_ahead_x = (x - 1)->get_pos_x();
+                                    float vehicle_ahead_y = (x - 1)->get_pos_y();
+                                    float dist = sqrt(pow(abs(vehicle_ahead_x - curr_pos_x), 2) + pow(abs(vehicle_ahead_y - curr_pos_y), 2));
                                     if (dist >= (x - 1)->get_length() + 5) x->turnRight();
                                 }
                             }
@@ -547,7 +550,7 @@ int main(int argc, char *args[])
                             {
                                 if (dir == 0)
                                 {
-                                    if (curr_col == "green" || ((curr_col == "red" || curr_col == "yellow") && (curr_pos.x <= 369.8 || curr_pos.x >= 372)))
+                                    if (curr_col == "green" || ((curr_col == "red" || curr_col == "yellow") && (curr_pos_x <= 369.8 || curr_pos_x >= 372)))
                                     {
                                         if (x == (Roads[i].get_list_of_lane() + j)->get_list_vehicles()->begin())
                                         {
@@ -555,8 +558,9 @@ int main(int argc, char *args[])
                                         }
                                         else 
                                         {
-                                            Coordination vehicle_ahead = (x - 1)->get_pos();
-                                            float dist = sqrt(pow(abs(vehicle_ahead.x - curr_pos.x), 2) + pow(abs(vehicle_ahead.y - curr_pos.y), 2));
+                                            float vehicle_ahead_x = (x - 1)->get_pos_x();
+                                            float vehicle_ahead_y = (x - 1)->get_pos_y();
+                                            float dist = sqrt(pow(abs(vehicle_ahead_x - curr_pos_x), 2) + pow(abs(vehicle_ahead_y - curr_pos_y), 2));
                                             if (dist >= (x - 1)->get_length() + 6.0) x->go();
                                             else if (x->get_have_add() == false){
                                                 (Roads[i].get_list_of_lane() + j)->addLength(*x);
@@ -564,14 +568,14 @@ int main(int argc, char *args[])
                                             }
                                         }
                                     }
-                                    else if (x->get_have_add() == false && curr_pos.x>369.8 && curr_pos.y <372){
+                                    else if (x->get_have_add() == false && curr_pos_x>369.8 && curr_pos_y <372){
                                                 (Roads[i].get_list_of_lane() + j)->addLength(*x);
                                                 x->set_have_add();
                                     }
                                 }
                                 if (dir == 1)
                                 {
-                                    if (curr_col == "green" || ((curr_col == "red" || curr_col == "yellow") && (curr_pos.x <= 588 || curr_pos.x >= 590.2)))
+                                    if (curr_col == "green" || ((curr_col == "red" || curr_col == "yellow") && (curr_pos_x <= 588 || curr_pos_x >= 590.2)))
                                     {
                                         if (x == (Roads[i].get_list_of_lane() + j)->get_list_vehicles()->begin())
                                         {
@@ -579,8 +583,9 @@ int main(int argc, char *args[])
                                         }
                                         else
                                         {
-                                            Coordination vehicle_ahead = (x - 1)->get_pos();
-                                            float dist = sqrt(pow(abs(vehicle_ahead.x - curr_pos.x), 2) + pow(abs(vehicle_ahead.y - curr_pos.y), 2));
+                                            float vehicle_ahead_x = (x - 1)->get_pos_x();
+                                            float vehicle_ahead_y = (x - 1)->get_pos_y();
+                                            float dist = sqrt(pow(abs(vehicle_ahead_x - curr_pos_x), 2) + pow(abs(vehicle_ahead_y - curr_pos_y), 2));
                                             if (dist >= (x - 1)->get_length() + 6.0) x->go();
                                             else if (x->get_have_add() == false){
                                                 (Roads[i].get_list_of_lane() + j)->addLength(*x);
@@ -588,14 +593,14 @@ int main(int argc, char *args[])
                                             }
                                         }
                                     }
-                                    else if (x->get_have_add() == false && curr_pos.x>369.8 && curr_pos.y <372){
+                                    else if (x->get_have_add() == false && curr_pos_x>369.8 && curr_pos_y <372){
                                                 (Roads[i].get_list_of_lane() + j)->addLength(*x);
                                                 x->set_have_add();
                                     }
                                 }
                                 if (dir == 2)
                                 {
-                                    if (curr_col == "green" || ((curr_col == "red" || curr_col == "yellow") && (curr_pos.y <= 369.8 || curr_pos.y >= 372)))
+                                    if (curr_col == "green" || ((curr_col == "red" || curr_col == "yellow") && (curr_pos_y <= 369.8 || curr_pos_y >= 372)))
                                     {
                                         if (x == (Roads[i].get_list_of_lane() + j)->get_list_vehicles()->begin())
                                         {
@@ -603,8 +608,9 @@ int main(int argc, char *args[])
                                         }
                                         else
                                         {
-                                            Coordination vehicle_ahead = (x - 1)->get_pos();
-                                            float dist = sqrt(pow(abs(vehicle_ahead.x - curr_pos.x), 2) + pow(abs(vehicle_ahead.y - curr_pos.y), 2));
+                                            float vehicle_ahead_x = (x - 1)->get_pos_x();
+                                            float vehicle_ahead_y = (x - 1)->get_pos_y();
+                                            float dist = sqrt(pow(abs(vehicle_ahead_x - curr_pos_x), 2) + pow(abs(vehicle_ahead_y - curr_pos_y), 2));
                                             if (dist >= (x - 1)->get_length() + 6.0)
                                                 x->go();
                                             else if (x->get_have_add() == false){
@@ -613,14 +619,14 @@ int main(int argc, char *args[])
                                             }
                                         }
                                     }
-                                    else if (x->get_have_add() == false && curr_pos.x>369.8 && curr_pos.y <372){
+                                    else if (x->get_have_add() == false && curr_pos_x>369.8 && curr_pos_y <372){
                                                 (Roads[i].get_list_of_lane() + j)->addLength(*x);
                                                 x->set_have_add();
                                     }
                                 }
                                 if (dir == 3)
                                 {
-                                    if (curr_col == "green" || ((curr_col == "red" || curr_col == "yellow") && (curr_pos.y >= 590.2 || curr_pos.y <= 588)))
+                                    if (curr_col == "green" || ((curr_col == "red" || curr_col == "yellow") && (curr_pos_y >= 590.2 || curr_pos_y <= 588)))
                                     {
                                         if (x == (Roads[i].get_list_of_lane() + j)->get_list_vehicles()->begin())
                                         {
@@ -628,8 +634,9 @@ int main(int argc, char *args[])
                                         }
                                         else
                                         {
-                                            Coordination vehicle_ahead = (x - 1)->get_pos();
-                                            float dist = sqrt(pow(abs(vehicle_ahead.x - curr_pos.x), 2) + pow(abs(vehicle_ahead.y - curr_pos.y), 2));
+                                            float vehicle_ahead_x = (x - 1)->get_pos_x();
+                                            float vehicle_ahead_y = (x - 1)->get_pos_y();
+                                            float dist = sqrt(pow(abs(vehicle_ahead_x - curr_pos_x), 2) + pow(abs(vehicle_ahead_y - curr_pos_y), 2));
                                             if (dist >= (x - 1)->get_length() + 6.0)
                                                 x->go();
                                             else if (x->get_have_add() == false){
@@ -638,7 +645,7 @@ int main(int argc, char *args[])
                                             }
                                         }
                                     }
-                                    else if (x->get_have_add() == false && curr_pos.x>369.8 && curr_pos.y <372){
+                                    else if (x->get_have_add() == false && curr_pos_x>369.8 && curr_pos_y <372){
                                                 (Roads[i].get_list_of_lane() + j)->addLength(*x);
                                                 x->set_have_add();
                                     }
@@ -685,8 +692,9 @@ int main(int argc, char *args[])
                         {
                             vehicles->push_back(*x);
                         }
-                        Coordination curr_pos = vehicles_list->front().get_pos();
-                        if (curr_pos.x > 1040 || curr_pos.x < -80 || curr_pos.y > 1040 || curr_pos.y < -80)
+                        float curr_pos_x = vehicles_list->front().get_pos_x();
+                        float curr_pos_y = vehicles_list->front().get_pos_y();
+                        if (curr_pos_x > 1040 || curr_pos_x < -80 || curr_pos_y > 1040 || curr_pos_y < -80)
                         {
                             (Roads[i].get_list_of_lane() + j)->delVehicle(vehicles_list->begin());
                             _score += vehicles_list->begin()->get_capacity();
@@ -701,55 +709,56 @@ int main(int argc, char *args[])
             short int rand0 = std::rand() % 4;
             short int rand1 = std::rand() % 3;
             short int rand2 = std::rand() % 10;
-            Coordination spawn_pos = (Roads[rand0].get_list_of_lane() + rand1)->get_pos();
+            float spawn_pos_x = (Roads[rand0].get_list_of_lane() + rand1)->get_pos_x();
+            float spawn_pos_y = (Roads[rand0].get_list_of_lane() + rand1)->get_pos_y();
             if (rand2 == 0)
             {
-                Car p_vehicle = Car(spawn_pos, rand0, rand1, 1, carImg_0);
+                Car p_vehicle = Car(spawn_pos_x, spawn_pos_y, rand0, rand1, 1, carImg_0);
                 (Roads[rand0].get_list_of_lane() + rand1)->addVehicle(p_vehicle);
             }
             if (rand2 == 1)
             {
-                Car p_vehicle = Car(spawn_pos, rand0, rand1, 2, carImg_1);
+                Car p_vehicle = Car(spawn_pos_x, spawn_pos_y, rand0, rand1, 2, carImg_1);
                 (Roads[rand0].get_list_of_lane() + rand1)->addVehicle(p_vehicle);
             }
             if (rand2 == 2)
             {
-                Car p_vehicle = Car(spawn_pos, rand0, rand1, 3, carImg_2);
+                Car p_vehicle = Car(spawn_pos_x, spawn_pos_y, rand0, rand1, 3, carImg_2);
                 (Roads[rand0].get_list_of_lane() + rand1)->addVehicle(p_vehicle);
             }
             if (rand2 == 3)
             {
-                Car p_vehicle = Car(spawn_pos, rand0, rand1, 4, carImg_3);
+                Car p_vehicle = Car(spawn_pos_x, spawn_pos_y, rand0, rand1, 4, carImg_3);
                 (Roads[rand0].get_list_of_lane() + rand1)->addVehicle(p_vehicle);
             }
             else if (rand2 == 4)
             {
-                Bus p_vehicle = Bus(spawn_pos, rand0, rand1, 5, busImg_0);
+                Bus p_vehicle = Bus(spawn_pos_x, spawn_pos_y, rand0, rand1, 5, busImg_0);
                 (Roads[rand0].get_list_of_lane() + rand1)->addVehicle(p_vehicle);
             }
             else if (rand2 == 5)
             {
-                Bus p_vehicle = Bus(spawn_pos, rand0, rand1, 6, busImg_1);
+                Bus p_vehicle = Bus(spawn_pos_x, spawn_pos_y, rand0, rand1, 6, busImg_1);
                 (Roads[rand0].get_list_of_lane() + rand1)->addVehicle(p_vehicle);
             }
             else if (rand2 == 6)
             {
-                Bus p_vehicle = Bus(spawn_pos, rand0, rand1, 7, busImg_2);
+                Bus p_vehicle = Bus(spawn_pos_x, spawn_pos_y, rand0, rand1, 7, busImg_2);
                 (Roads[rand0].get_list_of_lane() + rand1)->addVehicle(p_vehicle);
             }
             else if (rand2 == 7)
             {
-                Motorbike p_vehicle = Motorbike(spawn_pos, rand0, rand1, motorImg_0);
+                Motorbike p_vehicle = Motorbike(spawn_pos_x, spawn_pos_y, rand0, rand1, motorImg_0);
                 (Roads[rand0].get_list_of_lane() + rand1)->addVehicle(p_vehicle);
             }
             else if (rand2 == 8)
             {
-                Motorbike p_vehicle = Motorbike(spawn_pos, rand0, rand1, motorImg_1);
+                Motorbike p_vehicle = Motorbike(spawn_pos_x, spawn_pos_y, rand0, rand1, motorImg_1);
                 (Roads[rand0].get_list_of_lane() + rand1)->addVehicle(p_vehicle);
             }
             else if (rand2 == 9)
             {
-                Motorbike p_vehicle = Motorbike(spawn_pos, rand0, rand1, motorImg_2);
+                Motorbike p_vehicle = Motorbike(spawn_pos_x, spawn_pos_y, rand0, rand1, motorImg_2);
                 (Roads[rand0].get_list_of_lane() + rand1)->addVehicle(p_vehicle);
             }
             // std::cout<<lane[rand].get_curr_length();
@@ -763,7 +772,8 @@ int main(int argc, char *args[])
 
         for (short int i = 0; i < 4; i++)
         {
-            Coordination pos = Roads[i].get_trafficlight()->get_pos();
+            float pos_x = Roads[i].get_trafficlight()->get_pos_x();
+            float pos_y = Roads[i].get_trafficlight()->get_pos_y();
             if (Roads[i].get_trafficlight()->get_curr_color() == "green")
             {
                 if (_curr_time[i] == 6)
@@ -781,7 +791,7 @@ int main(int argc, char *args[])
                     _curr_time[i] = 2;
                     cntLight[i] = Text(window.render(), "res/dev/Blockletter.otf", 18, to_string(_curr_time[i]), {50, 50, 50});
                 }
-                cntLight[i].display(pos.x + 6, pos.y - 24, window.render());
+                cntLight[i].display(pos_x + 6, pos_y - 24, window.render());
             }
             else if (Roads[i].get_trafficlight()->get_curr_color() == "yellow")
             {
@@ -803,12 +813,12 @@ int main(int argc, char *args[])
                     _curr_time[i] = 6;
                     cntLight[i] = Text(window.render(), "res/dev/Blockletter.otf", 18, to_string(_curr_time[i]), {50, 50, 50});
                 }
-                cntLight[i].display(pos.x + 6, pos.y - 24, window.render());
+                cntLight[i].display(pos_x + 6, pos_y - 24, window.render());
             }
             else
             {
                 Text nothing = Text(window.render(), "res/dev/Blockletter.otf", 18, "--", {50, 50, 50});
-                nothing.display(pos.x + 5, pos.y - 20, window.render());
+                nothing.display(pos_x + 5, pos_y - 20, window.render());
             }
         }
         for (short int i = 0; i < 4; i++)

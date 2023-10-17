@@ -49,8 +49,8 @@ void RenderWindow::clear() {
 
 void RenderWindow::renderBackground(Enity &p_enity) {
     SDL_Rect dst;
-    dst.x = p_enity.get_pos().x;
-    dst.y = p_enity.get_pos().y;
+    dst.x = p_enity.get_pos_x();
+    dst.y = p_enity.get_pos_y();
     dst.w = p_enity.get_frame().w;
     dst.h = p_enity.get_frame().h;
 
@@ -59,8 +59,8 @@ void RenderWindow::renderBackground(Enity &p_enity) {
 
 void RenderWindow::renderButton(Enity &p_enity) {
     SDL_Rect dst;
-    dst.x = p_enity.get_pos().x;
-    dst.y = p_enity.get_pos().y;
+    dst.x = p_enity.get_pos_x();
+    dst.y = p_enity.get_pos_y();
     dst.w = 130;
     dst.h = 40;
 
@@ -77,8 +77,8 @@ void RenderWindow::renderVehicle(std::vector<Vehicle> *p_vehicles) {
         src.w = 1500;
         src.h = 2000;
         SDL_Rect dst;
-        dst.x = i->get_pos().x;
-        dst.y = i->get_pos().y;
+        dst.x = i->get_pos_x();
+        dst.y = i->get_pos_y();
         dst.w = i->get_frame().w;
         dst.h = i->get_frame().h;
         SDL_Point center;

@@ -5,20 +5,22 @@
 #include"Coordination.h"
 #include<vector>
 
-class Lane {
+class Lane: public Coordination {
     private:
         float max_length;
         float curr_length;
         std::vector<Vehicle> *list_vehicles;
-        Coordination pos;
     public:
     Lane();
-    Lane(Coordination p_pos);
-    float get_max_length();
-    float get_curr_length();
+    Lane(float x, float y);
+    float get_max_length() {return max_length;}
+    float get_curr_length() {return curr_length;}
     std::vector<Vehicle>* get_list_vehicles();
+    float get_pos_x() {return pos_x;}
+    float get_pos_y() {return pos_y;}
 
-    Coordination get_pos();
+    void set_pos_x(float p_x) {pos_x = p_x;}
+    void set_pos_y(float p_y) {pos_y = p_y;}
     void addVehicle(Vehicle p_vehicle);
     void addLength(Vehicle p_vehicle);
     void vehicleThrough(std::vector<Vehicle>::iterator x);

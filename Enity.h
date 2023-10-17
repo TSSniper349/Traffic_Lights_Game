@@ -3,24 +3,27 @@
 #include<SDL2/SDL_image.h>
 #include"Coordination.h"
 
-class Enity {
+class Enity: public Coordination{
     protected:
-        Coordination pos;
         SDL_Rect frame;
         SDL_Texture* tex;
     public:
         Enity() {};
-        Enity(Coordination p_pos, SDL_Texture* p_tex): pos(p_pos), tex(p_tex) {
+        Enity(short int x, short int y, SDL_Texture* p_tex): tex(p_tex) {
+            pos_x = x;
+            pos_y = y;
             frame.x = 0;
             frame.y = 0;
             frame.w = 960;
             frame.h = 960;
         };
-        Coordination &get_pos() {return pos;}
+        float get_pos_x() {return pos_x;}
+        float get_pos_y() {return pos_y;}
         SDL_Texture* get_tex() {return tex;}
         SDL_Rect get_frame() {return frame;}
 
-        void set_pos(Coordination p_pos) {pos = p_pos;};
+        void set_pos_x(float p_x) {pos_x = p_x;}
+        void set_pos_y(float p_y) {pos_y = p_y;}
         void set_tex(SDL_Texture* p_tex) {tex = p_tex;};
         void set_frame(short int w, short int h) {
             frame.x = 0;

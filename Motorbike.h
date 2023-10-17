@@ -6,8 +6,9 @@
 class Motorbike: public Vehicle {
     public:
     Motorbike() {};
-    Motorbike(Coordination p_pos,short int road, short int p_lane, SDL_Texture* p_tex) {
-        Enity::set_pos(p_pos);
+    Motorbike(float x, float y,short int road, short int p_lane, SDL_Texture* p_tex) {
+        Enity::set_pos_x(x);
+        Enity::set_pos_y(y);
         Enity::set_tex(p_tex);
         Enity::set_frame(20,25);
         Vehicle::set_speed(1.1);
