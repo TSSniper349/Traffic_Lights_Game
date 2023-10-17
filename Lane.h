@@ -24,7 +24,7 @@ class Lane {
     void vehicleThrough(std::vector<Vehicle>::iterator x);
     void delVehicle(std::vector<Vehicle>::iterator x);
     void clear_vehicle();
-    
+    ~Lane() {}
 };
 
 #endif

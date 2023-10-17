@@ -29,5 +29,5 @@ class Enity {
             frame.h = h;
         };
 
-        ~Enity() {};
+        ~Enity() {}
 };

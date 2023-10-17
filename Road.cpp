@@ -37,20 +37,6 @@ TrafficLight* Road::get_trafficlight(){
     return _trafficLight;
 }   
 
-// void Road::pollEvents(SDL_Keycode keycode){
-//     SDL_Event event;
-
-//     if (SDL_PollEvent(&event)){
-//         if (event.type == SDL_KEYDOWN){
-//             cout << event.key.keysym.sym << " " << keycode << endl;
-//             if (event.key.keysym.sym == keycode && _trafficLight->get_countdown_time() == 10) {
-//                 _trafficLight->set_color("green");
-//             }
-//         }
-//     }
-    
-// }
-
 Lane *Road::get_list_of_lane() {
     return list_of_lane;
 }
